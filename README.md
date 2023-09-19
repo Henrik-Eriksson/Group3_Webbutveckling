@@ -1,3 +1,20 @@
+# Group3_Webbutveckling 
+
+
+## Description
+
+We will create a Online Event Scheduling Application, a tool for scheduling meetings, appointments and event and we will use the MERN(MongoDB, Express.js, React, and Node.js) stack.
+
+
+## Authors Group Members
+
+| Name             | Github handle     |
+|------------------|-------------------|
+| Johan Sollenius  | [11Johan11](https://github.com/11Johan11) | 
+| Henrik Eriksson  | [Henrik-Eriksson](https://github.com/Henrik-Eriksson) |
+| Mohamad Alkhaled | [Mohamadalkhaled](https://github.com/Mohamadalkhaled) | 
+| Aron Kesete      | [AronKG](https://github.com/AronKG) | 
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
