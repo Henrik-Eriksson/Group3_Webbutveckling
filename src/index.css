@@ -25,3 +25,12 @@ padding-bottom: 35%;
   padding: 50px;
   padding-bottom: 135px;
 }
+
+#signuptext{
+  text-align: center;
+}
+
+#signUpBox{
+  margin: 30px;
+  text-align:center;
+}
