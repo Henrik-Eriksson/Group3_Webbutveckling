@@ -15,6 +15,11 @@ We will create a Online Event Scheduling Application, a tool for scheduling meet
 | Mohamad Alkhaled | [Mohamadalkhaled](https://github.com/Mohamadalkhaled) | 
 | Aron Kesete      | [AronKG](https://github.com/AronKG) | 
 
+# Running instruction
+Download [node.js](https://nodejs.org/en/download)
+``` npm install @mui/material @emotion/react @emotion/styled ```
+```npm run dev```
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
