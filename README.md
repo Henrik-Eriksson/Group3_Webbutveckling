@@ -16,9 +16,13 @@ We will create a Online Event Scheduling Application, a tool for scheduling meet
 | Aron Kesete      | [AronKG](https://github.com/AronKG) | 
 
 # Running instruction
-Download [node.js](https://nodejs.org/en/download)
-``` npm install @mui/material @emotion/react @emotion/styled ```
-```npm run dev```
+  Download [node.js](https://nodejs.org/en/download)
+
+  Install mui library
+  ``` npm install @mui/material @emotion/react @emotion/styled ```
+
+  Start the server
+  ```npm run dev```
 
 # React + Vite
 
