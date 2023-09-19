@@ -29,13 +29,14 @@ function Login(){
                 onChange={(e) => setUsername(e.target.value)} 
             />
             <input 
-                className = ".login-button"
+                className = "passowrd"
                 type="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)} 
             />
-            <button 
+            <button
+             className = ".login-button" 
              onClick={{handleLogin}}>submit</button>
             </>
         )}
