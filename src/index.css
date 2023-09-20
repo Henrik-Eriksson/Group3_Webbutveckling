@@ -34,3 +34,9 @@ padding-bottom: 35%;
   margin: 30px;
   text-align:center;
 }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
