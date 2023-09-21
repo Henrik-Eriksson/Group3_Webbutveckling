@@ -28,6 +28,7 @@ function Login() {
         <CustomInputField label="Username"/>
         <CustomInputField label="Password"/>
         <CustomCheckBox label="Remember me"/>
+        
           <Typography color="white" variant="paragraph" gutterBottom>
           {/*SPECIFIC FOR LOGIN*/}
           <br></br>
