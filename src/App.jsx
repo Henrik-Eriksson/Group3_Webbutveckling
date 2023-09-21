@@ -1,20 +1,18 @@
-//import React from 'react';
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-import './App.css';
-//import Login from './components/login.jsx'
-//import Calendar from "./components/Calendar"
-//import Login from './Login.jsx'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './HomePage.jsx';
+import Login from './Login.jsx';
+import Signup from './Signup.jsx';
 
+const App = () => {
+ return (
+   <Router>
+       <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+       </Routes>
+   </Router>
+ );
+};
 
-
-function App() { 
-  return (
-    <>
-    <div className="App"> 
-  
-    </div>
-    </>
-  );
-}
-export default App;  
+export default App;
