@@ -19,7 +19,7 @@ We will create a Online Event Scheduling Application, a tool for scheduling meet
   Download [node.js](https://nodejs.org/en/download)
 
   Install mui library
-    ``` npm install @mui/material @emotion/react @emotion/styled ```
+    ``` npm install ```
 
   Start the server
     ```npm run dev```
