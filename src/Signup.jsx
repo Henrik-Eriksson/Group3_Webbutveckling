@@ -1,54 +1,46 @@
 import { createRoot } from 'react-dom/client';
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Button, Paper, Box, Grid, TextField, Checkbox, FormGroup, FormControlLabel} from '@mui/material'
-import styled from '@emotion/styled';
+import {Button, Paper, Box, Grid, TextField, Checkbox, FormGroup, FormControlLabel, Hidden, Link, SvgIcon} from '@mui/material'
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+import Typography from '@mui/material/Typography';
+import GoogleIcon from '@mui/icons-material/Google';
+import CustomInputField from './components/CustomInputField.jsx';
+import CustomCheckBox from './components/CustomCheckBox.jsx';
+import CustomInfoBox from './components/CustomInfoBox.jsx';
+import CustomForm from './components/CustomForm.jsx';
 
+document.body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)),url(./src/assets/bg.jpg)`;
+document.body.style.backgroundSize = "cover";
+document.body.style.backgroundRepeat = "no-repeat";
 
-const InfoField = styled(TextField) ({
-  width: 600,
-  height: 60,
-  color: 'red',
-});
 
 
 function Signup() {
   return (
-    <Grid container>
-      <Grid item xs={8} sm ={6} md = {2}>
-        <Paper>
-        </Paper>
-        </Grid>
-        <Grid item xs={8} sm = {6} md = {8} spacing = {2}>
-        <Paper>
-          <body id = "signUpBox">
-          <h1>Sign Up For Application</h1>
-          <InfoField id ="signuptext" label = "Enter your First Name" variant="outlined" size = "large"/>
-          <p></p>
-          <InfoField id ="signuptext" label = "Enter your Last Name" variant="outlined" size = "large"/>
-          <p></p>
-          <InfoField id ="signuptext" label = "Enter your Username" variant="outlined" size = "large"/>
-          <p></p>
-          <InfoField id ="signuptext" label = "Enter your Email-address" variant="outlined" size = "large"/>
-          <p></p>
-          <InfoField id ="signuptext" label = "Enter your Password" variant="outlined" size = "large"/>
-          <p></p>
-          <InfoField id ="signuptext" label = "Confirm your Password" variant="outlined" size = "large"/>
-          <p></p>
-          <Button variant="contained"  sx={{width: 600, height: 60}} size = "large">CREATE YOUR ACCOUNT</Button>
+
+    <Grid container spacing={0} sx={{p: 5, alignItems: 'center', justifyContent: 'center' }}>        
+        <CustomForm buttonName="Sign Up">
+        <CustomInputField label="First Name"/>
+        <CustomInputField label="Last Name"/>
+        <CustomInputField label="Username"/>
+        <CustomInputField label="Email-address"/>
+        <CustomInputField label="Password"/>
+        <CustomInputField label="Confirm Password"/>
+        <CustomCheckBox label="Remember me"/>
+        
+          <Typography color="white" variant="paragraph" gutterBottom>
+          {/*SPECIFIC FOR SIGN UP*/}
           <p>Already have an account? <m>click here!</m></p>
           <p>Login with Google</p>
-          </body>
-        </Paper>
-        </Grid>
-        <Grid item xs={8} sm = {6} md = {2} spacing = {2}>
-        <Paper>
-        </Paper>
-        </Grid>
+          {/*:::::::::::::::::::::::::::::*/}
+          </Typography>
+        </CustomForm>
     </Grid>
+  
   )
 }
-
 export default Signup;
-// For traditional rendering
-// ReactDOM.render(<App />, document.getElementById('root'));
