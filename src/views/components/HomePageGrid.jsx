@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import Homepage_picture from '../assets/Homepage_picture.png';
+import Homepage_picture from '../../assets/Homepage_picture.png';
 import { Grid, Paper} from '@mui/material';
 
 function HomePageGrid(){
