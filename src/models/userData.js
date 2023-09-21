@@ -38,7 +38,7 @@ export const users = [
   },
     id: 4,
     username: 'Mohamed',
-    firstName: Mohamed',
+    firstName: 'Mohamed',
     lastName: 'Alkhaled',
     password: '26cab3a9af1f2235e2a66135dd2852f2d7c2cd38a7bd0114abb01835',  //SHA-2 Hashed password
     email: '101@hotmail.com',
