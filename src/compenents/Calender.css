@@ -1,0 +1,18 @@
+/* Calendar container */
+.container {
+    width: 550px;
+    height: 500px;
+    position:absolute;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    font-family: Arial, sans-serif;
+    background-color: aqua;
+  }
+ 
+  .event-container{
+    background-color: #ccc;
+    float: left;
+    height: 500px;
+    width: 200px;
+    
+  }
