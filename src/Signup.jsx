@@ -13,15 +13,19 @@ import CustomCheckBox from './components/CustomCheckBox.jsx';
 import CustomInfoBox from './components/CustomInfoBox.jsx';
 import CustomForm from './components/CustomForm.jsx';
 
-document.body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)),url(./src/assets/bg.jpg)`;
-document.body.style.backgroundSize = "cover";
-document.body.style.backgroundRepeat = "no-repeat";
-
 
 
 function Signup() {
   return (
-
+    <div style={{
+      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)),url(./src/assets/bg.jpg)`,
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
+      height: "100vh", // This will make sure the div takes the full viewport height
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }}>
     <Grid container spacing={0} sx={{p: 5, alignItems: 'center', justifyContent: 'center' }}>        
         <CustomForm buttonName="Sign Up">
         <CustomInputField label="First Name"/>
@@ -40,7 +44,7 @@ function Signup() {
           </Typography>
         </CustomForm>
     </Grid>
-  
+  </div>
   )
 }
 export default Signup;
