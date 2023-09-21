@@ -7,17 +7,12 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import Typography from '@mui/material/Typography';
-import GoogleIcon from '@mui/icons-material/Google';
 
-
-function CustomInputField(props)
+function CustomCheckBox(props)
 {
   return(
-          <>
-          <TextField sx={{backgroundColor: "white", borderRadius: "5px"}} id ="outlined-basic" label = {props.label} variant="filled" size = "small"/>
-          <br></br>
-          </>
-           )
+  <FormControlLabel sx={{color: "white"}} control = {<Checkbox defaultChecked sx={{color: "purple"}} color="secondary" size = "small" />} label = {props.label}/>
+  )
 }
 
-export default CustomInputField;
+export default CustomCheckBox;

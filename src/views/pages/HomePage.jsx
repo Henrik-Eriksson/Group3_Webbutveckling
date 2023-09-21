@@ -1,7 +1,7 @@
 import * as React from 'react';
-<
-import ResponsiveAppBar from './components/ResponsiveAppBar.jsx';
-import HomePageGrid from './components/HomePageGrid.jsx';
+
+import ResponsiveAppBar from '../components/ResponsiveAppBar.jsx';
+import HomePageGrid from '../components/HomePageGrid.jsx';
 
 function HomePage(){
     return(

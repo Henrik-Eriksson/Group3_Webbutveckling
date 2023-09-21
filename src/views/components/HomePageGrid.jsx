@@ -1,9 +1,8 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
+import Homepage_picture from '../../assets/Homepage_picture.png';
 import { Grid, Paper} from '@mui/material';
 
 function HomePageGrid(){
@@ -11,7 +10,7 @@ function HomePageGrid(){
         <Grid container spacing = {0} sx ={{alignItems: 'center', justifyContent: 'center'}}>
                 <Grid item xs={12} sm ={6} md = {6} sx={{ display: { xs: 'none', sm: 'none', md: 'block' }  }}>
                     <Paper sx = {{p: 5, boxShadow: 'none', backgroundColor: 'rgba(255,255,255,0.0)'}}>
-                         <img src='../HomePage_picture.png' width = "600" length = "600"></img>
+                         <img src={Homepage_picture} width = "600" length = "600"></img>
                     </Paper>
                 </Grid>
                 <Grid item xs={12} sm = {10} md = {6}>
@@ -34,5 +33,4 @@ function HomePageGrid(){
             </Grid>
     )
 }
-
 export default HomePageGrid;

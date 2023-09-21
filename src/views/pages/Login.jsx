@@ -8,17 +8,23 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import Typography from '@mui/material/Typography';
 import GoogleIcon from '@mui/icons-material/Google';
-import CustomInputField from './components/CustomInputField.jsx';
-import CustomCheckBox from './components/CustomCheckBox.jsx';
-import CustomInfoBox from './components/CustomInfoBox.jsx';
-import CustomForm from './components/CustomForm.jsx';
-
-document.body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)),url(./src/assets/bg.jpg)`;
-document.body.style.backgroundSize = "cover";
-document.body.style.backgroundRepeat = "no-repeat";
+import CustomInputField from '../components/CustomInputField.jsx';
+import CustomCheckBox from '../components/CustomCheckBox.jsx';
+import CustomInfoBox from '../components/CustomInfoBox.jsx';
+import CustomForm from '../components/CustomForm.jsx';
 
 function Login() {
   return (
+    <div style={{
+      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)),url(./src/assets/bg.jpg)`,
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
+      height: "100vh", // This will make sure the div takes the full viewport height
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }}>
+
     <Grid container spacing={0} sx={{p: 5, alignItems: 'center', justifyContent: 'center' }}>        
       <CustomInfoBox title="Welcome to our application" text="this is a example text for our application. this is a example text for our application. this is a example text for our application. 
             this is a example text for our application. this is a example text for our application. this is a example text for our application. 
@@ -40,6 +46,7 @@ function Login() {
           {/*:::::::::::::::::::::::::::::*/}
         </CustomForm>
     </Grid>
+    </div>
   )
 }
 
