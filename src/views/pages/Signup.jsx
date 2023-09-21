@@ -8,10 +8,10 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import Typography from '@mui/material/Typography';
 import GoogleIcon from '@mui/icons-material/Google';
-import CustomInputField from './components/CustomInputField.jsx';
-import CustomCheckBox from './components/CustomCheckBox.jsx';
-import CustomInfoBox from './components/CustomInfoBox.jsx';
-import CustomForm from './components/CustomForm.jsx';
+import CustomInputField from '../components/CustomInputField.jsx';
+import CustomCheckBox from '../components/CustomCheckBox.jsx';
+import CustomInfoBox from '../components/CustomInfoBox.jsx';
+import CustomForm from '../components/CustomForm.jsx';
 
 
 
