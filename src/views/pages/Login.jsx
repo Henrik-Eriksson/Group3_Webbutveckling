@@ -26,7 +26,7 @@ function Login() {
             this is a example text for our application. this is a example text for our application. this is a example text for our application. 
             this is a example text for our application. this is a example text for our application. this is a example text for our application. 
             this is a example text for our application. this is a example text for our application. this is a example text for our application. "/>
-        <CustomForm buttonName="Login">
+        <CustomForm buttonName="Login" href="/">
         <CustomInputField label="Username"/>
         <CustomInputField label="Password"/>
         <CustomCheckBox label="Remember me"/>
