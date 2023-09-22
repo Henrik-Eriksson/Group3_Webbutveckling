@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import ResponsiveAppBar from '../components/ResponsiveAppBar.jsx';
 import HomePageGrid from '../components/HomePageGrid.jsx';
 
