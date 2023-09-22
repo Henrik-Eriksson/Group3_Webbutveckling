@@ -1,4 +1,4 @@
-import {Grid} from '@mui/material'
+import {Grid,Link} from '@mui/material'
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -33,7 +33,9 @@ function Signup() {
         
           <Typography color="white" variant="paragraph" gutterBottom>
           {/*SPECIFIC FOR SIGN UP*/}
-          <p>Already have an account? <m>click here!</m></p>
+          <Link href="/login">
+            {"Already have an account?"}
+          </Link>
           <p>Login with Google</p>
           {/*:::::::::::::::::::::::::::::*/}
           </Typography>
