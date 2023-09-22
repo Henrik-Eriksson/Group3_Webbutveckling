@@ -22,7 +22,7 @@ function Signup() {
       justifyContent: "center"
     }}>
     <Grid container spacing={0} sx={{p: 5, alignItems: 'center', justifyContent: 'center' }}>        
-        <CustomForm buttonName="Sign Up">
+        <CustomForm buttonName="Sign Up" href="/">
         <CustomInputField label="First Name"/>
         <CustomInputField label="Last Name"/>
         <CustomInputField label="Username"/>
