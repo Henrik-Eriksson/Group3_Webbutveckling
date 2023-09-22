@@ -24,7 +24,7 @@ function CustomForm(props) {
         </Typography>
         <FormGroup>
           {inputFields}
-          <Button variant="contained">{props.buttonName}</Button>
+          <Button href={props.href} variant="contained">{props.buttonName}</Button>
         </FormGroup>
         {extraComponents}
       </Paper>
