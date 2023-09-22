@@ -1,23 +1,5 @@
-import React from 'react';
 import { Card, CardContent, Typography, List, ListItem, ListItemText, Avatar } from '@mui/material';
-
-const users = [
-  {
-    id: 1,
-    name: 'md',
-    username: 'md123',
-    email: 'jdd@example.com',
-    avatar: 'https://via.placeholder.com/64', 
-  },
-  {
-    id: 2,
-    name: 'dc',
-    username: 'dc456',
-    email: 'sss@example.com',
-    avatar: 'https://via.placeholder.com/64', 
-  },
-  // Add more users as needed
-];
+import {users} from '../../models/userData.jsx';
 
 function UserList() {
   return (
@@ -27,7 +9,7 @@ function UserList() {
         <List>
           {users.map((user) => (
             <ListItem key={user.id}>
-              <Avatar src={user.avatar} alt={user.name} />
+              <Avatar src={user.profilePicture} alt={user.username} />
               <ListItemText
                 primary={user.name}
                 secondary={`@${user.username} - ${user.email}`}

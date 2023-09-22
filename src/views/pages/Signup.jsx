@@ -1,16 +1,11 @@
-import { createRoot } from 'react-dom/client';
-import React from 'react'
-import ReactDOM from 'react-dom'
-import {Button, Paper, Box, Grid, TextField, Checkbox, FormGroup, FormControlLabel, Hidden, Link, SvgIcon} from '@mui/material'
+import {Grid,Link} from '@mui/material'
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import Typography from '@mui/material/Typography';
-import GoogleIcon from '@mui/icons-material/Google';
 import CustomInputField from '../components/CustomInputField.jsx';
 import CustomCheckBox from '../components/CustomCheckBox.jsx';
-import CustomInfoBox from '../components/CustomInfoBox.jsx';
 import CustomForm from '../components/CustomForm.jsx';
 
 
@@ -27,7 +22,7 @@ function Signup() {
       justifyContent: "center"
     }}>
     <Grid container spacing={0} sx={{p: 5, alignItems: 'center', justifyContent: 'center' }}>        
-        <CustomForm buttonName="Sign Up">
+        <CustomForm buttonName="Sign Up" href="/">
         <CustomInputField label="First Name"/>
         <CustomInputField label="Last Name"/>
         <CustomInputField label="Username"/>
@@ -38,7 +33,9 @@ function Signup() {
         
           <Typography color="white" variant="paragraph" gutterBottom>
           {/*SPECIFIC FOR SIGN UP*/}
-          <p>Already have an account? <m>click here!</m></p>
+          <Link href="/login">
+            {"Already have an account?"}
+          </Link>
           <p>Login with Google</p>
           {/*:::::::::::::::::::::::::::::*/}
           </Typography>
