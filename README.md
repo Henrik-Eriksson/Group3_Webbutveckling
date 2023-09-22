@@ -15,14 +15,27 @@ We will create a Online Event Scheduling Application, a tool for scheduling meet
 | Mohamad Alkhaled | [Mohamadalkhaled](https://github.com/Mohamadalkhaled) | 
 | Aron Kesete      | [AronKG](https://github.com/AronKG) | 
 
-# Running instruction
-  Download [node.js](https://nodejs.org/en/download)
+# Running instructions
+  1. If you don't already have it, Download & install [node.js](https://nodejs.org/en/download)
+  
+  2. Download the project's ZIP from GitHub.
 
-  Install mui library
+  3. Extract the files
+
+  4. Open up a terminal in the folder
+  
+  5. Install all necessary dependencies
     ``` npm install ```
 
-  Start the server
+  6. Start the server
     ```npm run dev```
+
+  This command starts the development server. You should be able to see the project running in the terminal. The terminal will display the port on which the local server is hosted, typically (http://localhost:5XXXX) or another specified port.
+
+  
+# ESLint
+  To run ESLint simply open a terminal in the project's folder and type
+  ```npm run lint```
 
 # React + Vite
 
