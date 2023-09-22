@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, CardContent, Typography, List, ListItem, ListItemText, Avatar } from '@mui/material';
 import {users} from '../../models/userData.jsx';
 
