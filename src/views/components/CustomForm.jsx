@@ -35,6 +35,7 @@ function CustomForm(props) {
 CustomForm.propTypes = {
   children: PropTypes.node.isRequired,
   buttonName: PropTypes.string.isRequired,
+  href: PropTypes.string
 };
 
 export default CustomForm;
