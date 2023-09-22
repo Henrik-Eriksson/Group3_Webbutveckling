@@ -1,18 +1,18 @@
-import { createRoot } from 'react-dom/client';
-import React from 'react'
-import ReactDOM from 'react-dom'
-import {Button, Paper, Box, Grid, TextField, Checkbox, FormGroup, FormControlLabel, Hidden, Link, SvgIcon} from '@mui/material'
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
-import Typography from '@mui/material/Typography';
+import { Checkbox, FormControlLabel } from '@mui/material';
+import PropTypes from 'prop-types';
 
-function CustomCheckBox(props)
-{
-  return(
-  <FormControlLabel sx={{color: "white"}} control = {<Checkbox defaultChecked sx={{color: "purple"}} color="secondary" size = "small" />} label = {props.label}/>
-  )
+function CustomCheckBox(props) {
+  return (
+    <FormControlLabel
+      sx={{color: "white"}}
+      control={<Checkbox defaultChecked sx={{color: "purple"}} color="secondary" size="small" />}
+      label={props.label}
+    />
+  );
 }
+
+CustomCheckBox.propTypes = {
+  label: PropTypes.string.isRequired,
+};
 
 export default CustomCheckBox;
