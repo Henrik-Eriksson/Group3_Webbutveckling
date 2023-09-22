@@ -9,10 +9,6 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
-"scripts": {
-  "lint": "eslint src/**/*.js src/**/*.jsx",
-  "lint:fix": "eslint src/**/*.js src/**/*.jsx --fix"
-},
 
   "dependencies": {
     "@emotion/react": "^11.11.1",
