@@ -25,7 +25,7 @@ function HomePageGrid(){
                         </Typography>
                         <Typography variant="h6" align="center">{"Click the button below to start planning!"}</Typography>
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                            <Button variant="contained" sx={{ width: 370, height: 60 }} size="small" href="https://www.example.com">START HERE</Button>
+                            <Button variant="contained" href="/calendar" sx={{ width: 370, height: 60 }} size="small">START HERE</Button>
                         </Box>                    
                     </Paper>
                 </Grid>
