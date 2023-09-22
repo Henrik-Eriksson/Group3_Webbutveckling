@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, CardContent, Typography, Button, Divider } from '@mui/material';
 
 const event = {
