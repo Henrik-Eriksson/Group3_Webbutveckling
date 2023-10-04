@@ -8,6 +8,11 @@ function CustomInputField(props) {
         sx={{backgroundColor: "white", borderRadius: "5px"}}
         id="outlined-basic"
         label={props.label}
+        value={props.value}
+        onChange={props.onChange}
+        error={props.error}
+        helperText={props.helperText}
+        type={props.type}
         variant="filled"
         size="small"
       />
