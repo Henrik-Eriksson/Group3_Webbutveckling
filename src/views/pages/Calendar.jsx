@@ -57,17 +57,6 @@ export default class DemoApp extends Component {
           <FullCalendar
             plugins={[dayGridPlugin]}
             initialView="dayGridMonth"
-            dateClick={this.handleDateClick}
-            dayCellContent={(arg) => (
-              // Each cell in the calendar
-              <div
-                className={`fc-day ${
-                  arg.dateStr === this.state.selectedDate ? 'selected-date' : ''
-                }`}
-              >
-                {arg.dayNumberText}
-              </div>
-            )}
           />
         </div>
       </div>
