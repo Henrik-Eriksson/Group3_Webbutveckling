@@ -1,15 +1,17 @@
 import React from 'react';
-import { Button, Paper, Grid, FormGroup, Typography } from '@mui/material';
+import { Button, Paper, Grid, FormGroup, Typography, TextField } from '@mui/material';
 import PropTypes from 'prop-types';
 import CustomInputField from './CustomInputField.jsx';
 import CustomCheckBox from './CustomCheckBox.jsx';
+import CustomizedMenus from './MenuItem.jsx';
+import TimePicker from './TimePicker.jsx';
 
 function CustomForm(props) {
   const inputFields = [];
   const extraComponents = [];
 
   React.Children.forEach(props.children, child => {
-    if (child.type === CustomInputField || child.type === CustomCheckBox) {
+    if (child.type === CustomInputField || child.type === CustomCheckBox || child.type === CustomizedMenus || child.type === TextField || child.type === Button || child.type === Typography || child.type === TimePicker) {
       inputFields.push(child);
     } else {
       extraComponents.push(child);
