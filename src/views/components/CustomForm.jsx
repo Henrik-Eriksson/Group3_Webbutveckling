@@ -22,10 +22,12 @@ function CustomForm(props) {
         <Typography sx={{color: "White"}} variant="h4" gutterBottom>
           {props.buttonName}
         </Typography>
+        <form onSubmit={props.onSubmit}>
         <FormGroup>
           {inputFields}
-          <Button href={props.href} variant="contained">{props.buttonName}</Button>
+          <Button type="submit" variant="contained">{props.buttonName}</Button>
         </FormGroup>
+        </form>
         {extraComponents}
       </Paper>
     </Grid>
@@ -35,7 +37,7 @@ function CustomForm(props) {
 CustomForm.propTypes = {
   children: PropTypes.node.isRequired,
   buttonName: PropTypes.string.isRequired,
-  href: PropTypes.string
+  onSubmit: PropTypes.func.isRequired
 };
 
 export default CustomForm;
