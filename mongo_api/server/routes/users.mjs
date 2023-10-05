@@ -92,6 +92,7 @@ router.post("/", async (req, res) => {
     lastName: req.body.lastName,
     username: req.body.username,
     email: req.body.email,
+
     password: req.body.password,
     ip: req.headers['x-forwarded-for'] ? req.headers['x-forwarded-for'].split(',')[0] : req.connection.remoteAddress,
     accountCreatedAt: currentTimestamp,
@@ -107,11 +108,21 @@ router.post("/", async (req, res) => {
   if (!(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(req.body.email))) return res.status(404).send(false);
   
   let collection = await db.collection("users");
+
   let result = await collection.insertOne(newDocument);
 
   //TODO: SEND SESSION TOKEN
   res.status(200).send(true);
 });
 //******************************************************************
+
+router.get("/getPassword/:username", async (req, res) => {
+  let collection = await db.collection("users");
+  let query = {username: req.params.username};
+  let result = await collection.findOne(query);
+
+  if (!result) res.status(200).send(false);
+  else res.status(200).send(result.password);
+});
 
 export default router;

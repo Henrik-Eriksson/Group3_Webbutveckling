@@ -8,8 +8,65 @@ import CustomInputField from '../components/CustomInputField.jsx';
 import CustomCheckBox from '../components/CustomCheckBox.jsx';
 import CustomInfoBox from '../components/CustomInfoBox.jsx';
 import CustomForm from '../components/CustomForm.jsx';
+import { useState } from 'react';
+import axios from 'axios';
+
+
 
 function Login() {
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+  });
+
+// State variables to track if username and/or email already exist
+const [usernameExistsError, setUsernameExistsError] = useState(false);
+//const [emailExistsError, setEmailExistsError] = useState(false);
+const [passwordMatchError, setPasswordMatchError] = useState(false); // Define passwordMatchError
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  setUsernameExistsError(false);
+  setPasswordMatchError(false); // Reset passwordMatchError
+  //setEmailExistsError(false);
+
+  // Check if username already exists
+  try {
+    const usernameResponse = await axios.get(`http://localhost:5050/api/users/username/${formData.username}`);
+    console.log(usernameResponse);
+    if (usernameResponse.data === false) {
+      setUsernameExistsError(true);
+    }
+  } catch (error) {
+    if (error.response.status !== 404) {
+      console.error("An error occurred while checking the username:", error);
+    }
+  }
+
+  try
+  {
+    const passwordResponse = await axios.get(`http://localhost:5050/api/users/getPassword/${formData.username}`);
+ 
+    if (String(formData.password) !== String(passwordResponse.data)) {
+      setPasswordMatchError(true);
+      //console.log(typeof formData.password);
+      //console.log("fel lösen");
+    } else
+    {
+      
+      setPasswordMatchError(false);
+    }
+  }
+  catch(error)
+  {
+    if (error.response.status !== 404) {
+      console.error("An error occurred while checking the password:", error);
+    }
+  }
+}
+
+
   return (
     <div style={{
       backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)),url(./src/assets/bg.jpg)`,
@@ -26,9 +83,23 @@ function Login() {
             this is a example text for our application. this is a example text for our application. this is a example text for our application. 
             this is a example text for our application. this is a example text for our application. this is a example text for our application. 
             this is a example text for our application. this is a example text for our application. this is a example text for our application. "/>
-        <CustomForm buttonName="Login" href="/">
-        <CustomInputField label="Username"/>
-        <CustomInputField label="Password"/>
+        <CustomForm buttonName="Login" onSubmit={handleSubmit}
+        
+        >
+        <CustomInputField 
+        error = {usernameExistsError} helperText={usernameExistsError ? "Wrong username" : ""}
+         label="Username"
+         value={formData.username}
+         onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+         />
+        <CustomInputField
+          error = {passwordMatchError} helperText={passwordMatchError ? "Wrong Password": ""} 
+
+         label="Password"
+         type="password"
+         value={formData.password}
+         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+         />
         <CustomCheckBox label="Remember me"/>
         
           <Typography color="white" variant="paragraph" gutterBottom>
@@ -44,6 +115,5 @@ function Login() {
     </Grid>
     </div>
   )
-}
-
+ } 
 export default Login;
