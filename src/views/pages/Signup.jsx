@@ -68,7 +68,7 @@ const handleSubmit = async (e) => {
       console.error("An error occurred while checking the email:", error);
     }
   }
-  
+
   let hasPasswordMatchError = formData.password !== formData.confirmPassword;
   let hasPasswordLengthError = formData.password.length < 8 || formData.password.length > 50;
   let hasLastNameError = !(/^[A-Za-zåäöÅÄÖ]+$/.test(formData.lastName)) || formData.lastName.length < 2 || formData.lastName.length > 35;
@@ -99,8 +99,10 @@ const handleSubmit = async (e) => {
     });
 
     if (response.status === 200) {
-      alert("Signup successful!");
-      // TODO: Redirect to homepage and save session token and/or cook
+      //alert("Signup successful!");
+      console.log(response.data);
+      localStorage.setItem('session', response.data);
+      location.replace('/');
     } else {
       console.log(response);
       alert("Signup failed!");
@@ -112,7 +114,7 @@ const handleSubmit = async (e) => {
 
   return (
     <div style={{
-      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)),url(./src/assets/bg.jpg)`,
+      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)),url(./src/assets/kissekatt.png)`,
       backgroundSize: "cover",
       backgroundRepeat: "no-repeat",
       overflow: "hidden",
@@ -122,7 +124,7 @@ const handleSubmit = async (e) => {
       justifyContent: "center"
     }}>
     <Grid container spacing={0} sx={{p: 5, alignItems: 'center', justifyContent: 'center' }}>        
-        <CustomForm buttonName="Sign Up" onSubmit={handleSubmit}>
+        <CustomForm title="Create Your Account" titleColor="white" buttonName="Sign Up" onSubmit={handleSubmit}>
 
         <CustomInputField error = {firstNameError} helperText={firstNameError ? "Invalid first name" : ""} label="First Name" value={formData.firstName}  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}/>
         <CustomInputField error = {lastNameError} helperText={lastNameError ? "Invalid last name" : ""} label="Last Name" value={formData.lastName}  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}/>

@@ -82,7 +82,9 @@ router.get("/email/:email", async (req, res) => {
   else res.status(200).send(true);
 });
 //-----------------------------------------------------------------
-
+ function generateUniqueId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+  }
 //USED FOR SIGNUP
 router.post("/", async (req, res) => {
   const currentTimestamp = Math.floor(Date.now() / 1000);
@@ -107,12 +109,26 @@ router.post("/", async (req, res) => {
   if(!(/^[A-Za-z0-9åäöÅÄÖ]+$/.test(req.body.username)) || req.body.username.length < 2 || req.body.username.length > 35) return res.status(404).send(false);
   if (!(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(req.body.email))) return res.status(404).send(false);
   
+  //Add user to DB
   let collection = await db.collection("users");
-
   let result = await collection.insertOne(newDocument);
 
-  //TODO: SEND SESSION TOKEN
-  res.status(200).send(true);
+  //Setup session variables
+  let userId = result.insertedId; //user id 
+  let sessionId = generateUniqueId();
+
+  newDocument = 
+  {
+    userId: userId,
+    session: sessionId
+  };
+
+  //Add the user session to DB
+  collection = await db.collection("sessions");
+  result = await collection.insertOne(newDocument);
+
+  //TODO: SEND SESSION TOKEN, AND STORE IN BROWSER
+  res.status(200).send(sessionId);
 });
 //******************************************************************
 
