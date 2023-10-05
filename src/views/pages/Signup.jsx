@@ -124,7 +124,8 @@ const handleSubmit = async (e) => {
       justifyContent: "center"
     }}>
     <Grid container spacing={0} sx={{p: 5, alignItems: 'center', justifyContent: 'center' }}>        
-        <CustomForm title="Create Your Account" titleColor="white" buttonName="Sign Up" onSubmit={handleSubmit}>
+        <CustomForm title = "Create Your Account" titleColor = "White" buttonName="Sign Up" onSubmit={handleSubmit}>
+
 
         <CustomInputField error = {firstNameError} helperText={firstNameError ? "Invalid first name" : ""} label="First Name" value={formData.firstName}  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}/>
         <CustomInputField error = {lastNameError} helperText={lastNameError ? "Invalid last name" : ""} label="Last Name" value={formData.lastName}  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}/>

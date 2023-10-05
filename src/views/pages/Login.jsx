@@ -69,7 +69,7 @@ const handleSubmit = async (e) => {
 
   return (
     <div style={{
-      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)),url(./src/assets/bg.jpg)`,
+      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)),url(./src/assets/kissekatt.png)`,
       backgroundSize: "cover",
       backgroundRepeat: "no-repeat",
       height: "100vh", // This will make sure the div takes the full viewport height
@@ -83,7 +83,7 @@ const handleSubmit = async (e) => {
             this is a example text for our application. this is a example text for our application. this is a example text for our application. 
             this is a example text for our application. this is a example text for our application. this is a example text for our application. 
             this is a example text for our application. this is a example text for our application. this is a example text for our application. "/>
-        <CustomForm buttonName="Login" onSubmit={handleSubmit}
+        <CustomForm title = "Login To Your Account" titleColor = "White" buttonName="Login" onSubmit={handleSubmit}
         
         >
         <CustomInputField 

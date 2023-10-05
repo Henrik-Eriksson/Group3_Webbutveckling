@@ -21,8 +21,8 @@ function CustomForm(props) {
   return (
     <Grid item xs={12} sm={10} md={6} sx={{p: {xl: 10, lg: 10, md: 0, xs: 0, sm: 0}, m: 0 }}>
       <Paper sx={{p:5, backgroundColor: 'rgba(255, 255, 255, 0.0)', boxShadow: 'none'}}>
-        <Typography sx={{color: "White"}} variant="h4" gutterBottom>
-          {props.buttonName}
+        <Typography sx={{color: props.titleColor}} variant="h4" gutterBottom align = "center">
+          {props.title}
         </Typography>
         <form onSubmit={props.onSubmit}>
         <FormGroup>
