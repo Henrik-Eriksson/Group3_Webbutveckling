@@ -28,6 +28,7 @@ const StyledMenu = styled((props) => (
     borderRadius: 6,
     marginTop: theme.spacing(1),
     minWidth: 180,
+    width: 'auto',
     color:
       theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
     boxShadow:
@@ -51,14 +52,28 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-export default function CustomizedMenus( {name, menuItems} ) {
+const buttonStyle = {
+  width: 400,
+  height: 40,
+  fontSize: 16,
+  paddingLeft: 16,
+  paddingRight: 16,
+};
+
+export default function CustomizedMenus({ name, menuItems }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const [selectedOption, setSelectedOption] = React.useState(null);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+
+  const handleClose = (item) => {
     setAnchorEl(null);
+    if (item) {
+      setSelectedOption(item.label);
+    }
   };
 
   return (
@@ -72,8 +87,9 @@ export default function CustomizedMenus( {name, menuItems} ) {
         disableElevation
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}
+        style={buttonStyle}
       >
-        {name}
+        {selectedOption || name}
       </Button>
       <StyledMenu
         id="demo-customized-menu"
@@ -82,24 +98,24 @@ export default function CustomizedMenus( {name, menuItems} ) {
         }}
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
+        onClose={() => handleClose(null)}
       >
         {menuItems.map((item, index) => {
           if (item.type === 'divider') {
             return <Divider key={index} sx={{ my: 0.5 }} />;
           }
           return (
-            <MenuItem key={index} onClick={handleClose} disableRipple>
+            <MenuItem
+              key={index}
+              onClick={() => handleClose(item)}
+              disableRipple
+            >
               {item.icon}
               {item.label}
             </MenuItem>
           );
         })}
       </StyledMenu>
-
-     
-    
-
     </div>
   );
 }

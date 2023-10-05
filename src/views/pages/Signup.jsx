@@ -112,7 +112,7 @@ const handleSubmit = async (e) => {
 
   return (
     <div style={{
-      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)),url(./src/assets/bg.jpg)`,
+      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)),url(./src/assets/kissekatt.png)`,
       backgroundSize: "cover",
       backgroundRepeat: "no-repeat",
       overflow: "hidden",
@@ -122,7 +122,7 @@ const handleSubmit = async (e) => {
       justifyContent: "center"
     }}>
     <Grid container spacing={0} sx={{p: 5, alignItems: 'center', justifyContent: 'center' }}>        
-        <CustomForm buttonName="Sign Up" onSubmit={handleSubmit}>
+        <CustomForm title = "Create Your Account" titleColor = "White" buttonName="Sign Up" onSubmit={handleSubmit}>
 
         <CustomInputField error = {firstNameError} helperText={firstNameError ? "Invalid first name" : ""} label="First Name" value={formData.firstName}  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}/>
         <CustomInputField error = {lastNameError} helperText={lastNameError ? "Invalid last name" : ""} label="Last Name" value={formData.lastName}  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}/>

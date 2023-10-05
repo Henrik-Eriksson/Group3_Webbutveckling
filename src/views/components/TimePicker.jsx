@@ -8,7 +8,7 @@ export default function BasicTimePicker({name}) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DemoContainer components={['TimePicker']}>
-        <TimePicker label={name} />
+        <TimePicker sx={{backgroundColor: 'rgba(255, 255, 255)', boxShadow: 'none'}} label={name} />
       </DemoContainer>
     </LocalizationProvider>
   );
