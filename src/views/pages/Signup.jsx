@@ -68,36 +68,26 @@ const handleSubmit = async (e) => {
       console.error("An error occurred while checking the email:", error);
     }
   }
+  
+  let hasPasswordMatchError = formData.password !== formData.confirmPassword;
+  let hasPasswordLengthError = formData.password.length < 8 || formData.password.length > 50;
+  let hasLastNameError = !(/^[A-Za-zåäöÅÄÖ]+$/.test(formData.lastName)) || formData.lastName.length < 2 || formData.lastName.length > 35;
+  let hasFirstNameError = !(/^[A-Za-zåäöÅÄÖ]+$/.test(formData.firstName)) || formData.firstName.length < 2 || formData.firstName.length > 35;
+  let hasUsernameError = !(/^[A-Za-z0-9åäöÅÄÖ]+$/.test(formData.username)) || formData.username.length < 2 || formData.username.length > 35;
+  let hasEmailError = !(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(formData.email));
 
-  // Check if passwords match
-  if (formData.password !== formData.confirmPassword) setPasswordMatchError(true);
-  else setPasswordMatchError(false);
-
-  // Check if password is too short
-  if (formData.password.length < 8 || formData.password.length > 50) setPasswordLengthError(true);
-  else setPasswordLengthError(false);
-
-
-  if(/^[A-Za-zåäöÅÄÖ]+$/.test(formData.lastName) && formData.lastName.length >= 2 && formData.lastName.length <= 35) setLastNameError(false);
-  else setLastNameError(true);
-
-  if(/^[A-Za-zåäöÅÄÖ]+$/.test(formData.firstName) && formData.firstName.length >= 2 && formData.firstName.length <= 35) setFirstNameError(false);
-  else setFirstNameError(true);
-
-  // Check if username is valid (only numbers and letters)
-  if (/^[A-Za-z0-9åäöÅÄÖ]+$/.test(formData.username) && formData.username.length >= 2 && formData.username.length <= 35) setUsernameError(false);
-  else setUsernameError(true);
-
-  // Check if email is valid
-  if (/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(formData.email)) setEmailError(false);
-  else setEmailError(true);
-
+  // Update state variables
+  setPasswordMatchError(hasPasswordMatchError);
+  setPasswordLengthError(hasPasswordLengthError);
+  setLastNameError(hasLastNameError);
+  setFirstNameError(hasFirstNameError);
+  setUsernameError(hasUsernameError);
+  setEmailError(hasEmailError);
 
   // If any error is present, return early
-  if (passwordMatchError || passwordLengthError || firstNameError || lastNameError || usernameError || emailError) {
+  if (hasPasswordMatchError || hasPasswordLengthError || hasFirstNameError || hasLastNameError || hasUsernameError || hasEmailError) {
       return; // No reason to continue with the HTTP post to the MongoDB API
   }
-
   try {
     const response = await axios.post('http://localhost:5050/api/users/', {
       firstName: formData.firstName,
@@ -108,9 +98,9 @@ const handleSubmit = async (e) => {
       confirmPassword: formData.confirmPassword
     });
 
-    if (response.status === 204) {
+    if (response.status === 200) {
       alert("Signup successful!");
-      // TODO: Redirect to homepage
+      // TODO: Redirect to homepage and save session token and/or cook
     } else {
       console.log(response);
       alert("Signup failed!");

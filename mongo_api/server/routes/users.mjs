@@ -11,6 +11,12 @@ function validUsername(username)
   return false;
 }
 
+function validFirstName()
+{
+  if(username.length < 35 && username.length > 3 && /^[A-Za-z0-9åäöÅÄÖ]+$/.test(username)) return true;
+  return false;
+}
+
 // This section will help you get a list of all the records.
 router.get("/", async (req, res) => {
   let collection = await db.collection("users");
@@ -91,9 +97,20 @@ router.post("/", async (req, res) => {
     accountCreatedAt: currentTimestamp,
     lastLoggedIn: currentTimestamp
   };
+  //BACKEND VALIDATION
+
+  //BACKEND VALIDATION
+  if (req.body.password.length < 8 || req.body.password.length > 50) return res.status(404).send(false);
+  if(!(/^[A-Za-zåäöÅÄÖ]+$/.test(req.body.lastName)) || req.body.lastName.length < 2 || req.body.lastName.length > 35) return res.status(404).send(false);
+  if(!(/^[A-Za-zåäöÅÄÖ]+$/.test(req.body.firstName)) || req.body.firstName.length < 2 || req.body.firstName.length > 35) return res.status(404).send(false);
+  if(!(/^[A-Za-z0-9åäöÅÄÖ]+$/.test(req.body.username)) || req.body.username.length < 2 || req.body.username.length > 35) return res.status(404).send(false);
+  if (!(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(req.body.email))) return res.status(404).send(false);
+  
   let collection = await db.collection("users");
   let result = await collection.insertOne(newDocument);
-  res.send(true).status(200);
+
+  //TODO: SEND SESSION TOKEN
+  res.status(200).send(true);
 });
 //******************************************************************
 
