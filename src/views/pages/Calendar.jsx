@@ -11,15 +11,51 @@ export default class DemoApp extends Component {
     this.state = {
       searchDate: '',
       selectedDate: null,
+      calendarEvents: [],
     };
+    this.calendarRef = React.createRef(); // Create a ref for the FullCalendar component
   }
 
   handleSearchClick = () => {
-    // Handle search logic here
+    const { searchDate } = this.state;
+    if (searchDate) {
+      // Update the selectedDate state
+      this.setState({ selectedDate: searchDate }, () => {
+        // Use the FullCalendar ref to change the displayed date
+        if (this.calendarRef.current) {
+          this.calendarRef.current.getApi().gotoDate(searchDate);
+        }
+        // Add an event to highlight the selected date
+        this.addSelectedDateEvent(searchDate);
+      });
+    } else {
+      alert('Please enter a date before searching.');
+    }
   };
 
   handleBookingClick = () => {
-    // Handle booking logic here
+    if (this.state.selectedDate) {
+      alert(`Booked time on ${this.state.selectedDate}`);
+    } else {
+      alert('Please select a date before booking.');
+    }
+  };
+
+  // Add an event to highlight the selected date
+  addSelectedDateEvent = (date) => {
+    const { calendarEvents } = this.state;
+
+    // Remove any existing selected date event
+    const filteredEvents = calendarEvents.filter((event) => event.className !== 'selected-date');
+
+    // Add the new selected date event
+    filteredEvents.push({
+      title: 'Selected Day',
+      start: date,
+      className: 'selected-date',
+    });
+
+    this.setState({ calendarEvents: filteredEvents });
   };
 
   render() {
@@ -47,7 +83,7 @@ export default class DemoApp extends Component {
             variant="contained"
             color="secondary"
             onClick={this.handleBookingClick}
-            size="large" // Increase the button size
+            size="large"
           >
             Book time
           </Button>
@@ -55,8 +91,10 @@ export default class DemoApp extends Component {
 
         <div className='calendar-container'>
           <FullCalendar
+            ref={this.calendarRef} // Assign the ref to the FullCalendar component
             plugins={[dayGridPlugin]}
             initialView="dayGridMonth"
+            events={this.state.calendarEvents} // Pass the events array to FullCalendar
           />
         </div>
       </div>
