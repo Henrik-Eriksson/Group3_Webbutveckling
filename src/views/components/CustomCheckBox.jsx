@@ -7,6 +7,9 @@ function CustomCheckBox(props) {
       sx={{color: "white"}}
       control={<Checkbox defaultChecked sx={{color: "purple"}} color="secondary" size="small" />}
       label={props.label}
+      onChange={props.onChange}
+      checked={props.checked}
+      defaultChecked={false}
     />
   );
 }
