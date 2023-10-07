@@ -24,6 +24,9 @@ const [usernameError, setUsernameError] = useState(false);
 //const [emailExistsError, setEmailExistsError] = useState(false);
 const [passwordMatchError, setPasswordMatchError] = useState(false); // Define passwordMatchError
 
+const [rememberMe, setRememberMe] = useState(false);
+
+
 const handleSubmit = async (e) => {
   e.preventDefault();
 
@@ -40,9 +43,13 @@ const handleSubmit = async (e) => {
     });
 
     if (response.status === 200) {
-      //alert("Signup successful!");
       console.log(response.data);
-      localStorage.setItem('session', response.data);
+      if(rememberMe)
+      {
+        localStorage.setItem('session', response.data); //longterm
+      } else {
+        sessionStorage.setItem('session', response.data); //shortterm
+      }
       location.replace('/');
     } else {
 
@@ -98,7 +105,7 @@ const handleSubmit = async (e) => {
          value={formData.password}
          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
          />
-        <CustomCheckBox label="Remember me"/>
+        <CustomCheckBox checked={rememberMe} label="Remember me" onChange={(e) => setRememberMe(e.target.checked)}/>
         
           <Typography color="white" variant="paragraph" gutterBottom>
           {/*SPECIFIC FOR LOGIN*/}
