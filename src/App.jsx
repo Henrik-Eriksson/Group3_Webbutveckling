@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import HomePage from './views/pages/HomePage.jsx';
 import Login from './views/pages/Login.jsx';
 import Signup from './views/pages/Signup.jsx';
@@ -11,25 +11,18 @@ const useIsLoggedIn = () => {
 };
 
 const LoginPage = () => {
-  const navigate = useNavigate();
+
   const isLoggedIn = useIsLoggedIn();
-  console.log(isLoggedIn);
-  console.log(window.localStorage.getItem('session'));
-  if (isLoggedIn) {
-    navigate('/', { replace: true });
-    console.log("NAVIGATE TO HOMEPAGE")
-  }
+
+  if (isLoggedIn) return <Navigate to='/' replace={true}/>
 
   return <Login />;
 };
 
 const SignupPage = () => {
-  const navigate = useNavigate();
   const isLoggedIn = useIsLoggedIn();
 
-  if (isLoggedIn) {
-    navigate('/');
-  }
+  if (isLoggedIn) return <Navigate to='/' replace={true}/>
 
   return <Signup />;
 };
