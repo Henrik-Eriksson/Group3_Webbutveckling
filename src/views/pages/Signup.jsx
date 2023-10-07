@@ -89,7 +89,7 @@ const handleSubmit = async (e) => {
       return; // No reason to continue with the HTTP post to the MongoDB API
   }
   try {
-    const response = await axios.post('http://localhost:5050/api/users/', {
+    const response = await axios.post('http://localhost:5050/api/users/signup', {
       firstName: formData.firstName,
       lastName: formData.lastName,
       username: formData.username,

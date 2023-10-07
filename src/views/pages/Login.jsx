@@ -20,51 +20,49 @@ function Login() {
   });
 
 // State variables to track if username and/or email already exist
-const [usernameExistsError, setUsernameExistsError] = useState(false);
+const [usernameError, setUsernameError] = useState(false);
 //const [emailExistsError, setEmailExistsError] = useState(false);
 const [passwordMatchError, setPasswordMatchError] = useState(false); // Define passwordMatchError
 
 const handleSubmit = async (e) => {
   e.preventDefault();
 
-  setUsernameExistsError(false);
+  setUsernameError(false);
   setPasswordMatchError(false); // Reset passwordMatchError
   //setEmailExistsError(false);
 
   // Check if username already exists
-  try {
-    const usernameResponse = await axios.get(`http://localhost:5050/api/users/username/${formData.username}`);
-    console.log(usernameResponse);
-    if (usernameResponse.data === false) {
-      setUsernameExistsError(true);
+
+   try {
+    const response = await axios.post('http://localhost:5050/api/users/login', {
+      username: formData.username,
+      password: formData.password
+    });
+
+    if (response.status === 200) {
+      //alert("Signup successful!");
+      console.log(response.data);
+      localStorage.setItem('session', response.data);
+      location.replace('/');
+    } else {
+
+      console.log(response);
+      
     }
   } catch (error) {
-    if (error.response.status !== 404) {
-      console.error("An error occurred while checking the username:", error);
-    }
-  }
-
-  try
-  {
-    const passwordResponse = await axios.get(`http://localhost:5050/api/users/getPassword/${formData.username}`);
- 
-    if (String(formData.password) !== String(passwordResponse.data)) {
-      setPasswordMatchError(true);
-      //console.log(typeof formData.password);
-      //console.log("fel lösen");
-    } else
+    console.log(error);
+    if(error.response.data.error == "password")
     {
-      
-      setPasswordMatchError(false);
+        setPasswordMatchError(true);
     }
-  }
-  catch(error)
-  {
-    if (error.response.status !== 404) {
-      console.error("An error occurred while checking the password:", error);
+    if(error.response.data.error == "username")
+    {
+      setUsernameError(true);
     }
+
+    //TODO: ELSE DISPLAY A INTERNALS ERVER ERROR AT THE TOP
   }
-}
+};
 
 
   return (
@@ -87,7 +85,7 @@ const handleSubmit = async (e) => {
         
         >
         <CustomInputField 
-        error = {usernameExistsError} helperText={usernameExistsError ? "Wrong username" : ""}
+        error = {usernameError} helperText={usernameError ? "Wrong username" : ""}
          label="Username"
          value={formData.username}
          onChange={(e) => setFormData({ ...formData, username: e.target.value })}
