@@ -1,60 +1,88 @@
 import React, { useState } from "react";
-import CustomForm from "./CustomForm";
-import CustomInputField from "./CustomInputField";
-import CustomizedMenus from "./MenuItem";
-import TextField from "@mui/material/TextField";
-import { Typography } from "@mui/material";
-import TimePicker from "./TimePicker";
+import { Button, TextField, Typography, FormControl, InputLabel, Select, MenuItem, Paper, Grid } from "@mui/material";
 
-function CreateEvent() {
+function CreateEvent({closeDialog, addEvent, selectedDates, clearSelectedDates}) {
+  const [eventType, setEventType] = useState('');
+
+  const [formData, setFormData] = useState({
+    title: '',
+    desc: '',
+    startTime: '',
+    endTime: ''
+  });
+
   const menuItems = [
-    { label: "Business Meeting" },
-    { label: "Social Event" },
-    { label: "Educational Event" },
-    { label: "Entertainment Event" },
-    { label: "Sporting Event" },
-    { label: "Networking Event" },
-    { label: "Food and Drink Event" },
-    { label: "Charity or Fundraising Event" },
-    { label: "Outdoor Adventure" },
-    { label: "Gaming Event" },
-    { label: "Other" },
+    "Business Meeting",
+    "Social Event",
+    "Educational Event",
+    "Entertainment Event",
+    "Sporting Event",
+    "Networking Event",
+    "Food and Drink Event",
+    "Charity or Fundraising Event",
+    "Outdoor Adventure",
+    "Gaming Event",
+    "Other"
   ];
+
+  const handleEventTypeChange = (event) => {
+    setEventType(event.target.value);
+  };
+
+
+
+    const handleCreateEvent = () => {
+    
+    const newEvent = {
+      id: String(Date.now()), // unique id for the event
+      title: formData.title, // get this from the form
+      start: selectedDates[0], // get this from the form
+      //end: "2023-10-20",
+      display: "block"
+      // ... other event details
+    };
+
+    //TODO: add to DB and retrieve
+    addEvent(newEvent);
+    
+    clearSelectedDates();
+    closeDialog();
+  };
+
+
 
   return (
     <div style={{
       backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)),url(./src/assets/kissekatt.png)`,
       backgroundSize: "cover",
       backgroundRepeat: "no-repeat",
-      overflow: "hidden",
-      height: "100vh", // This will make sure the div takes the full viewport height
+      height: "auto",
       display: "flex",
       alignItems: "center",
       justifyContent: "center"
     }}>
-    <CustomForm title="Create A New Event" titleColor="white" buttonName="Create Event" onSubmit={() => {}}>
-      <CustomInputField label="Event Name" />
-      <CustomInputField label="Event Description" />
-      <CustomInputField label="Event Location" />
-      <CustomInputField label="Invite friends" />
-      <TimePicker name={"Start Time"} />
-      <TimePicker name={"End Time"} style/>
-      <Typography variant="h2" gutterBottom>
-      </Typography>
-      <CustomizedMenus
-        menuItems={menuItems}
-        name="Event Type"
-      />
-      <Typography variant="h6" gutterBottom style = {{color: "white"}}>
-        Select Date
-      </Typography>
-      <TextField
-        sx={{ backgroundColor: "white", borderRadius: "5px" }}
-        type="date"
-        variant="outlined"
-        style = {{marginBottom: '20px' }}
-      />
-    </CustomForm>
+      <Paper style={{ padding: '20px', width: '80%', maxWidth: '500px', backgroundColor: 'rgba(255, 255, 255, 0.0)', boxShadow: 'none' }}>
+        <TextField fullWidth margin="normal" label="Event Name" variant="outlined" onChange={(e) => setFormData({ ...formData, title: e.target.value })} style={{ backgroundColor: 'white' }} />
+        <TextField fullWidth margin="normal" label="Event Description" onChange={(e) => setFormData({ ...formData, desc: e.target.value })} variant="outlined" style={{ backgroundColor: 'white' }} />
+        <TextField fullWidth margin="normal" label="Invite friends" variant="outlined" style={{ backgroundColor: 'white' }} />
+        <TextField fullWidth margin="normal" label="     Start Time" type="time" onChange={(e) => setFormData({ ...formData, startTime: e.target.value })} variant="outlined" style={{ backgroundColor: 'white' }} />
+        <TextField fullWidth margin="normal" label="     End Time" type="time" onChange={(e) => setFormData({ ...formData, endTime: e.target.value })} variant="outlined" style={{ backgroundColor: 'white' }}  />
+        <FormControl fullWidth variant="outlined" margin="normal" style={{ backgroundColor: 'white' }}>
+          <InputLabel>Event Type</InputLabel>
+          <Select
+            value={eventType}
+            onChange={handleEventTypeChange}
+            label="Event Type"
+          >
+            {menuItems.map((item, index) => (
+              <MenuItem key={index} value={item}>{item}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Button variant="contained" color="primary" onClick={handleCreateEvent} style={{ marginTop: '20px' }}>
+          Create Event
+        </Button>
+      </Paper>
     </div>
   );
 }
