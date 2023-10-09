@@ -1,8 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { Button, TextField, Typography, FormControl, InputLabel, Select, MenuItem, Paper, Grid } from "@mui/material";
 
-function CreateEvent({closeDialog, addEvent, selectedDates, clearSelectedDates}) {
+function CreateEvent({closeDialog, addEvent, setSelectedDates, selectedDates, clearSelectedDates}) {
   const [eventType, setEventType] = useState('');
+  let endDate = null;
+
+
+  useEffect(() => {
+   // console.log(selectedDates);
+    let date = new Date(selectedDates[selectedDates.length - 1]);
+    date.setDate(date.getDate());
+    endDate = date;
+    console.log(endDate);
+}, [selectedDates]);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -32,13 +42,19 @@ function CreateEvent({closeDialog, addEvent, selectedDates, clearSelectedDates})
 
 
     const handleCreateEvent = () => {
-    
+      let date = new Date(selectedDates[selectedDates.length - 1]);
+      date.setDate(date.getDate());
+      endDate = date;
+      
+      console.log(formData.startTime);
     const newEvent = {
       id: String(Date.now()), // unique id for the event
       title: formData.title, // get this from the form
       start: selectedDates[0], // get this from the form
-      //end: "2023-10-20",
-      display: "block"
+      end: endDate, // get this from the form
+      display: "block",
+      backgroundColor: "black",
+      //startTime: formData.startTime
       // ... other event details
     };
 

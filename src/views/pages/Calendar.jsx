@@ -240,7 +240,7 @@ function toLocalISOString(date) {
    
          <Dialog open={open} onClose={handleClose}  sx={{overflow: "auto"}}  maxWidth="xl"  // or "lg" or "xl"
     fullWidth={true}>
-        <CreateEvent closeDialog={handleClose} addEvent={addEvent} selectedDates={selectedDates} clearSelectedDates={clearSelectedDates}/>
+        <CreateEvent closeDialog={handleClose} addEvent={addEvent} setSelectedDates={setSelectedDates} selectedDates={selectedDates} clearSelectedDates={clearSelectedDates}/>
       </Dialog>
     </Grid>
   );
