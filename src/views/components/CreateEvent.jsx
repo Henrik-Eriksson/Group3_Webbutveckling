@@ -37,6 +37,7 @@ function CreateEvent({closeDialog, addEvent, setSelectedDates, selectedDates, cl
 
   const handleEventTypeChange = (event) => {
     setEventType(event.target.value);
+    setFormData({ ...formData, eventType: event.target.value });
   };
 
 
@@ -54,6 +55,7 @@ function CreateEvent({closeDialog, addEvent, setSelectedDates, selectedDates, cl
       end: endDate, // get this from the form
       display: "block",
       backgroundColor: "black",
+      extendedProps: {"description": formData.desc, "eventType": formData.eventType}
       //startTime: formData.startTime
       // ... other event details
     };

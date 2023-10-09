@@ -14,7 +14,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-
+import EventDetails from '../components/EventDetails.jsx';
 
 export const StyleWrapper = styled.div`
 font-family: 'Roboto', sans-serif;
@@ -94,8 +94,21 @@ function MyCalendar() {
     setEvents(prevEvents => [...prevEvents, newEvent]);
   }
 
+const [eventDetails, setEventDetails] = useState([]);
+function handleEventClick(info)
+{
+  let desc = info.event._def.extendedProps.description;
+  let title = info.event._def.title;
+  let eventType = info.event._def.extendedProps.eventType;
+  let startTime = info.event._instance.range.start;
+  let endTime = info.event._instance.range.end;
 
+ let temp = [{desc: desc, title: title, eventType: eventType, startTime: startTime, endTime: endTime}];
 
+  setEventDetails(temp);
+  setOpenEventDetails(true);
+
+}
 
 
   const [selectedDates, setSelectedDates] = useState([]);
@@ -117,10 +130,15 @@ function handleDateClick(info) {
 }
 
   const [open, setOpen] = useState(false);
-
+  const [openEventDetails, setOpenEventDetails] = useState(false);
   function createEventClick(info) {
     console.log(info);
     setOpen(true); // Open the dialog
+  }
+
+  function handleDetailClose()
+  {
+    setOpenEventDetails(false);
   }
 
   function handleClose() {
@@ -218,6 +236,7 @@ function toLocalISOString(date) {
                         eventMouseEnter={handleMouseEnter}
                         eventMouseLeave={handleMouseLeave}
                         dayCellDidMount={dayCellDidMount}
+                        eventClick={handleEventClick}
                         //dayCellContent={dayCellContentRender}
                         customButtons={{
                             myCustomButton: {
@@ -242,8 +261,11 @@ function toLocalISOString(date) {
     fullWidth={true}>
         <CreateEvent closeDialog={handleClose} addEvent={addEvent} setSelectedDates={setSelectedDates} selectedDates={selectedDates} clearSelectedDates={clearSelectedDates}/>
       </Dialog>
+
+      <Dialog open={openEventDetails} onClose={handleDetailClose}  sx={{overflow: "auto"}}  maxWidth="xl">  
+        <EventDetails closeDialog={handleClose} eventDetails={eventDetails}/>
+        </Dialog>
     </Grid>
   );
 }
-
 export default MyCalendar;

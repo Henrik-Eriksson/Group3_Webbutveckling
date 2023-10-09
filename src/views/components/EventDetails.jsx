@@ -8,25 +8,20 @@ const event = {
   description: 'This is a sample event description.',
 };
 
-function EventDetails() {
+function EventDetails({eventDetails}) {
+  console.log(eventDetails);
+  eventDetails = eventDetails[0];
   return (
     <Card variant="outlined">
       <CardContent>
-        <Typography variant="h5" component="div">
-          Event Details
-        </Typography>
-        <Divider />
-        <Typography variant="subtitle1">Event Name: {event.name}</Typography>
-        <Typography variant="body1">Date: {event.date}</Typography>
-        <Typography variant="body1">Time: {event.time}</Typography>
-        <Typography variant="body1">Location: {event.location}</Typography>
-        <Typography variant="body2">Description: {event.description}</Typography>
+        <Typography variant="h5">Event Details</Typography>
+        <Typography variant="subtitle1">Event Name: {eventDetails.title}</Typography>
+        <Typography variant="body1">Date: {eventDetails.startTime.toLocaleDateString()}</Typography>
+        <Typography variant="body1">Time: {eventDetails.startTime.toLocaleTimeString()} - {eventDetails.endTime.toLocaleTimeString()}</Typography>
+        <Typography variant="body2">EventType: {eventDetails.eventType}</Typography>
+        <Typography variant="body2">Description: {eventDetails.desc}</Typography>
       </CardContent>
-      <Button variant="contained" color="primary">
-        Register
-      </Button>
     </Card>
   );
 }
-
 export default EventDetails;
