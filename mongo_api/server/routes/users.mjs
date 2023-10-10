@@ -157,4 +157,31 @@ router.get("/getPassword/:username", async (req, res) => {
   else res.status(200).send(result.password);
 });
 
+
+//EVENTS
+
+
+router.post("/createEvent", async (req, res) => {
+  const currentTimestamp = Math.floor(Date.now() / 1000);
+
+  let collection = await db.collection("events");
+  let result = await collection.insertOne(req.body);
+
+  if(!result) res.status(200);
+  else res.status(401);
+});
+
+
+//GET USERID FROM SESSIONID
+router.get("/userId", async (req, res) => {
+  const currentTimestamp = Math.floor(Date.now() / 1000);
+
+  let collection = await db.collection("sessions");
+  let query = {session: req.params.session};
+  let result = await collection.findOne(query);
+
+  if(!result) res.status(200).send(result);
+  else res.status(200).send(result.data);
+});
+
 export default router;

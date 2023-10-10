@@ -5,6 +5,41 @@ import Signup from './views/pages/Signup.jsx';
 import Calendar from './views/pages/Calendar.jsx';
 import CreateEvent from './views/components/CreateEvent.jsx';
 import EventDetails from './views/components/EventDetails.jsx';
+import  Profile from './views/pages/Profile.jsx';
+import axios from 'axios';
+
+export async function getUserId()
+{
+
+   const longTermSessionId = localStorage.getItem('session');
+  const shortTermSessionId = sessionStorage.getItem('session');
+
+  let sessionIdToSave;
+
+  if (longTermSessionId) {
+      sessionIdToSave = longTermSessionId;
+  } else if (shortTermSessionId) {
+      sessionIdToSave = shortTermSessionId;
+  }
+
+    try {
+    const response = await axios.post('http://localhost:5050/api/users/userId', {
+      sessionId: sessionIdToSave
+    });
+
+    console.log(response);
+    if (response.status === 200) {
+      alert("It worked");
+      console.log(response);
+    } else {
+      alert("Something went wrong");
+    }
+  } catch (error) {
+    alert("An error occurred: " + error.message);
+  }
+
+  }
+
 
 const userIsLoggedIn = () => {
   const longTermSessionId = localStorage.getItem('session');
@@ -66,6 +101,7 @@ const App = () => {
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/CreateEvent" element={<CreateEvent />} />
         <Route path="/EventDetails" element={<EventDetails/>} />
+        <Route path="/Profile" element={<Profile/>} />
       </Routes>
     </Router>
   );

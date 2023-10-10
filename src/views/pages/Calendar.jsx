@@ -15,6 +15,8 @@ import { useState, useEffect, useRef } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import EventDetails from '../components/EventDetails.jsx';
+import { getUserId } from '../../app.jsx'
+
 
 export const StyleWrapper = styled.div`
 font-family: 'Roboto', sans-serif;
@@ -88,11 +90,37 @@ const date2 = new Date("2023-10-12");
   }
 
 function MyCalendar() {
+ 
+
+
+
+  getUserId();
+
   const calendarRef = useRef(null);
   const [events, setEvents] = useState([]);
 
-  function addEvent(newEvent) {
+ async function addEvent(newEvent) {
+
+
     setEvents(prevEvents => [...prevEvents, newEvent]);
+    //TODO: add event to db
+
+  try {
+    const response = await axios.post('http://localhost:5050/api/users/createEvent', {
+      newEvent
+    });
+
+    console.log(response);
+    if (response.status === 200) {
+      alert("It worked");
+      console.log(response);
+    } else {
+      alert("Something went wrong");
+    }
+  } catch (error) {
+    alert("An error occurred: " + error.message);
+  }
+
   }
 
   function deleteEvent(id) {
