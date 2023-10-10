@@ -9,7 +9,7 @@ import axios from 'axios';
 import ProfilePage from './views/pages/ProfilePage.jsx'; 
 import AccountPage from './views/pages/AccountPage.jsx'; 
 
-export async function getUserId()
+export async function authenticate()
 {
 
    const longTermSessionId = localStorage.getItem('session');
@@ -28,16 +28,17 @@ export async function getUserId()
       sessionId: sessionIdToSave
     });
 
-    console.log(response);
+
     if (response.status === 200) {
-      alert("It worked");
-      console.log(response);
+      return response.data.userId;
     } else {
-      alert("Something went wrong");
+      console.error("Couldn't authenticate and fetch userId");
     }
   } catch (error) {
-    alert("An error occurred: " + error.message);
+    console.error("An error occurred: " + error.message);
   }
+
+  return null;
 
   }
 

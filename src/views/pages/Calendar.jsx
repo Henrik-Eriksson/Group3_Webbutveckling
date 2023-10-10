@@ -15,7 +15,7 @@ import { useState, useEffect, useRef } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import EventDetails from '../components/EventDetails.jsx';
-import { getUserId } from '../../app.jsx'
+import { authenticate } from '../../app.jsx'
 
 
 export const StyleWrapper = styled.div`
@@ -90,43 +90,86 @@ const date2 = new Date("2023-10-12");
   }
 
 function MyCalendar() {
- 
-
-
-
-  getUserId();
 
   const calendarRef = useRef(null);
   const [events, setEvents] = useState([]);
 
- async function addEvent(newEvent) {
 
+ async function addExistingEvents()
+ {
 
-    setEvents(prevEvents => [...prevEvents, newEvent]);
-    //TODO: add event to db
-
+  let userId = await authenticate();
+  if (userId == null) return;
   try {
-    const response = await axios.post('http://localhost:5050/api/users/createEvent', {
-      newEvent
+    // Fetch existing events for the user
+    let response = await axios.post('http://localhost:5050/api/users/getEvents', {
+      userId: userId
     });
 
-    console.log(response);
+    if (response.status !== 200) {
+      console.error("Something went wrong while fetching events");
+      return;
+    }
+
+    // Check if the newEvent already exists in the fetched events
+    const existingEvents = response.data; // the server returns an array of events
+    // Loop through each event and call addEvent
+    existingEvents.forEach(event => {
+      setEvents(prevEvents => [...prevEvents, event]);
+    });
+  } catch (error) {
+    console.error("An error occurred while fetching events: " + error.message);
+    return;
+  }
+
+ }
+ async function addEvent(newEvent) {
+  let userId = await authenticate();
+  if (userId == null) return;
+  console.log("hello");
+
+  // If the event doesn't exist, add it to the database
+  console.log("hello1");
+  try {
+    let response = await axios.post('http://localhost:5050/api/users/createEvent', {
+      event: newEvent,
+      userId: userId,
+      shared: []
+    });
+
+    console.log("hello2");
     if (response.status === 200) {
-      alert("It worked");
+      console.log("Event added successfully");
       console.log(response);
+      setEvents(prevEvents => [...prevEvents, newEvent]);
     } else {
-      alert("Something went wrong");
+      console.log("Something went wrong while adding the event");
+      console.log(response);
+    }
+
+  } catch (error) {
+    console.error("An error occurred while adding the event: " + error.message);
+    console.log(response)
+  }
+}
+
+async function deleteEvent(id) {
+  try {
+    // Make a DELETE request to the backend to delete the event
+    const response = await axios.delete(`http://localhost:5050/api/users/deleteEvent/${id}`);
+
+    // Check if the event was deleted successfully
+    if (response.status === 200) {
+      // Update the local state to reflect the deletion
+      setEvents(prevEvents => prevEvents.filter(event => event.id !== id));
+      console.log("Event deleted successfully");
+    } else {
+      console.error("Failed to delete event from backend:", response.data.message);
     }
   } catch (error) {
-    alert("An error occurred: " + error.message);
+    console.error("Error deleting event:", error);
   }
-
-  }
-
-  function deleteEvent(id) {
-    setEvents(prevEvents => prevEvents.filter(event => event.id !== id));
-    console.log("deleting event");
-  }
+}
 
 const [eventDetails, setEventDetails] = useState([]);
 function handleEventClick(info)
@@ -185,17 +228,20 @@ function handleDateClick(info) {
   const [reRender, setReRender] = useState(true); //ez just make a change to a key that forces the component to re mount
 
   useEffect(() => {
-    const fetchHolidays = async () => {
+    const prepareCalendarData = async () => {
       let allHolidays = [];
       for (let year = 2022; year <= 2031; year++) {
         const response = await axios.get(`https://date.nager.at/api/v3/PublicHolidays/${year}/SE`);
         allHolidays = allHolidays.concat(response.data);
       }
       setHolidays(allHolidays);
+   
+      await addExistingEvents();
+
       setLoading(false);
     };
 
-    fetchHolidays();
+    prepareCalendarData();
   }, []);
 
 
