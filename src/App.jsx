@@ -5,6 +5,8 @@ import Signup from './views/pages/Signup.jsx';
 import Calendar from './views/pages/Calendar.jsx';
 import CreateEvent from './views/components/CreateEvent.jsx';
 import EventDetails from './views/components/EventDetails.jsx';
+import ProfilePage from './views/pages/ProfilePage.jsx'; 
+
 
 const userIsLoggedIn = () => {
   const longTermSessionId = localStorage.getItem('session');
@@ -66,6 +68,7 @@ const App = () => {
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/CreateEvent" element={<CreateEvent />} />
         <Route path="/EventDetails" element={<EventDetails/>} />
+        <Route path="/Profile" element={<ProfilePage/>} /> 
       </Routes>
     </Router>
   );
