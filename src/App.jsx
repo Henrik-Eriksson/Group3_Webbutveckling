@@ -5,8 +5,9 @@ import Signup from './views/pages/Signup.jsx';
 import Calendar from './views/pages/Calendar.jsx';
 import CreateEvent from './views/components/CreateEvent.jsx';
 import EventDetails from './views/components/EventDetails.jsx';
-import  Profile from './views/pages/Profile.jsx';
 import axios from 'axios';
+import ProfilePage from './views/pages/ProfilePage.jsx'; 
+import AccountPage from './views/pages/AccountPage.jsx'; 
 
 export async function getUserId()
 {
@@ -39,6 +40,7 @@ export async function getUserId()
   }
 
   }
+
 
 
 const userIsLoggedIn = () => {
@@ -101,7 +103,8 @@ const App = () => {
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/CreateEvent" element={<CreateEvent />} />
         <Route path="/EventDetails" element={<EventDetails/>} />
-        <Route path="/Profile" element={<Profile/>} />
+        <Route path="/Profile" element={<ProfilePage/>} /> 
+        <Route path="/Account" element={<AccountPage/>} />
       </Routes>
     </Router>
   );
