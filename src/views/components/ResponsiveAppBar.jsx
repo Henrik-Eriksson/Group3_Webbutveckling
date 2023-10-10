@@ -13,7 +13,9 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 
-const pages = ['Home', 'Calender', 'Profile', 'Account'];
+
+const pages = ['Home', 'Calendar', 'Profile', 'Account'];
+const links = ['', 'calendar', 'profile', 'account']; 
 const settings = ['Profile', 'Account', 'Logout'];
 
 function ResponsiveAppBar() {
@@ -28,8 +30,17 @@ function ResponsiveAppBar() {
   };
 
   const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
+    
+    setAnchorElUser(null);
   };
+
+  const handleClickNavMenu = (page) => {
+   
+    window.location.replace("/" + links[pages.indexOf(page)]);
+  };
+
+
+  
 
   const handleClickUserMenu = (setting) => {
     setAnchorElUser(null);
@@ -93,7 +104,7 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page} onClose={handleCloseNavMenu} onClick={() => handleClickNavMenu(page)}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -122,7 +133,7 @@ function ResponsiveAppBar() {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={() => handleClickNavMenu(page)}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}
