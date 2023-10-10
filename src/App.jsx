@@ -6,6 +6,7 @@ import Calendar from './views/pages/Calendar.jsx';
 import CreateEvent from './views/components/CreateEvent.jsx';
 import EventDetails from './views/components/EventDetails.jsx';
 import ProfilePage from './views/pages/ProfilePage.jsx'; 
+import AccountPage from './views/pages/AccountPage.jsx'; 
 
 
 const userIsLoggedIn = () => {
@@ -69,6 +70,7 @@ const App = () => {
         <Route path="/CreateEvent" element={<CreateEvent />} />
         <Route path="/EventDetails" element={<EventDetails/>} />
         <Route path="/Profile" element={<ProfilePage/>} /> 
+        <Route path="/Account" element={<AccountPage/>} />
       </Routes>
     </Router>
   );
