@@ -42,13 +42,7 @@ function CreateEvent({closeDialog, addEvent, setSelectedDates, selectedDates, cl
 
 
     const handleCreateEvent = () => {
-      const currentDate = new Date();
-      const selectedStartDate = new Date(selectedDates[0]);
-  
-      if (selectedStartDate < currentDate) {
-        alert("Cannot book events in the past.");
-        return;
-      }
+    
 
       let date = new Date(selectedDates[selectedDates.length - 1]);
       date.setDate(date.getDate());
@@ -66,7 +60,43 @@ function CreateEvent({closeDialog, addEvent, setSelectedDates, selectedDates, cl
       //startTime: formData.startTime
       // ... other event details
     };
+    const startTimeParts = formData.startTime.split(":");
+    const endTimeParts = formData.endTime.split(":");
+    const currentDate = new Date();
+    const selectedStartDate = new Date(selectedDates[0]);
 
+    const startTime = new Date(
+      selectedStartDate.getFullYear(),
+      selectedStartDate.getMonth(),
+      selectedStartDate.getDate(),
+      parseInt(startTimeParts[0], 10),
+      parseInt(startTimeParts[1], 10)
+    );
+  
+    const endTime = new Date(
+      selectedStartDate.getFullYear(),
+      selectedStartDate.getMonth(),
+      selectedStartDate.getDate(),
+      parseInt(endTimeParts[0], 10),
+      parseInt(endTimeParts[1], 10)
+    );
+
+
+
+    if (selectedStartDate < currentDate) {
+      console.log(selectedStartDate);
+      alert("Can not book events in the past\n or \nEnd time cannot be before start time.");
+
+      return;
+    } 
+
+    // Check if the end date is before the start da
+    if (endTime < startTime) {
+      alert("End time cannot be before start time.");
+      return;
+    }
+    console.log(endTime.toString());
+    console.log(startTime.toString());
     //TODO: add to DB and retrieve
     addEvent(newEvent);
     
