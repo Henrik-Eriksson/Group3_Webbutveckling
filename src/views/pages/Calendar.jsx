@@ -11,7 +11,7 @@ import CreateEvent from '../components/CreateEvent.jsx';
 import { Button, Paper, Grid, FormGroup, Typography, TextField } from '@mui/material';
 import ResponsiveAppBar from '../components/ResponsiveAppBar.jsx';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import EventDetails from '../components/EventDetails.jsx';
@@ -88,10 +88,16 @@ const date2 = new Date("2023-10-12");
   }
 
 function MyCalendar() {
+  const calendarRef = useRef(null);
   const [events, setEvents] = useState([]);
 
   function addEvent(newEvent) {
     setEvents(prevEvents => [...prevEvents, newEvent]);
+  }
+
+  function deleteEvent(id) {
+    setEvents(prevEvents => prevEvents.filter(event => event.id !== id));
+    console.log("deleting event");
   }
 
 const [eventDetails, setEventDetails] = useState([]);
@@ -102,8 +108,9 @@ function handleEventClick(info)
   let eventType = info.event._def.extendedProps.eventType;
   let startTime = info.event._instance.range.start;
   let endTime = info.event._instance.range.end;
+  let id = info.event._def.publicId;
 
- let temp = [{desc: desc, title: title, eventType: eventType, startTime: startTime, endTime: endTime}];
+ let temp = [{desc: desc, title: title, eventType: eventType, startTime: startTime, endTime: endTime, id : id}];
 
   setEventDetails(temp);
   setOpenEventDetails(true);
@@ -263,7 +270,7 @@ function toLocalISOString(date) {
       </Dialog>
 
       <Dialog open={openEventDetails} onClose={handleDetailClose}  sx={{overflow: "auto"}}  maxWidth="xl">  
-        <EventDetails closeDialog={handleClose} eventDetails={eventDetails}/>
+        <EventDetails deleteEvent={deleteEvent} closeDialog={handleClose} eventDetails={eventDetails}/>
         </Dialog>
     </Grid>
   );
