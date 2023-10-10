@@ -3,6 +3,7 @@ import { Button, TextField, Typography, FormControl, InputLabel, Select, MenuIte
 
 function CreateEvent({closeDialog, addEvent, setSelectedDates, selectedDates, clearSelectedDates}) {
   const [eventType, setEventType] = useState('');
+  const [backgroundColor, setBackgroundColor] = useState('black');
   let endDate = null;
 
   useEffect(() => {
@@ -45,16 +46,22 @@ function CreateEvent({closeDialog, addEvent, setSelectedDates, selectedDates, cl
       let date = new Date(selectedDates[selectedDates.length - 1]);
       date.setDate(date.getDate());
       endDate = date;
-      
+       // Check if the event type is "random" and set the background color accordingly
+        const validColors = ["black", "red", "blue", "green"];
+        const randomColor = validColors[Math.floor(Math.random() * validColors.length)];
+        setBackgroundColor(randomColor)
+
       console.log(formData.startTime);
+      
     const newEvent = {
       id: String(Date.now()), // unique id for the event
       title: formData.title, // get this from the form
       start: selectedDates[0], // get this from the form
       end: endDate, // get this from the form
       display: "block",
-      backgroundColor: "black",
-      extendedProps: {"description": formData.desc, "eventType": formData.eventType}
+      displayEventTime: false,
+      backgroundColor: randomColor,
+      extendedProps: {"description": formData.desc, "eventType": formData.eventType, "startTime" : formData.startTime, "endTime" : formData.endTime}
       //startTime: formData.startTime
       // ... other event details
     };
