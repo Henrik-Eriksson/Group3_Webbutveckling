@@ -42,6 +42,14 @@ function CreateEvent({closeDialog, addEvent, setSelectedDates, selectedDates, cl
 
 
     const handleCreateEvent = () => {
+      const currentDate = new Date();
+      const selectedStartDate = new Date(selectedDates[0]);
+  
+      if (selectedStartDate < currentDate) {
+        alert("Cannot book events in the past.");
+        return;
+      }
+
       let date = new Date(selectedDates[selectedDates.length - 1]);
       date.setDate(date.getDate());
       endDate = date;
