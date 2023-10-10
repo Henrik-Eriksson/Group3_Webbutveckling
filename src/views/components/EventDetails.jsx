@@ -1,16 +1,11 @@
 import { Card, CardContent, Typography, Button, Divider } from '@mui/material';
 
-const event = {
-  name: ' Event',
-  date: '2023-09-30',
-  time: '10:00 AM - 12:00 PM',
-  location: 'JU',
-  description: 'This is a sample event description.',
-};
-
-function EventDetails({eventDetails}) {
-  console.log(eventDetails);
+function EventDetails({eventDetails, deleteEvent}) {
+  console.log(eventDetails.id);
   eventDetails = eventDetails[0];
+  function deleteEventBtn() {
+  deleteEvent(eventDetails.id);
+  }
   return (
     <Card variant="outlined">
       <CardContent>
@@ -20,6 +15,9 @@ function EventDetails({eventDetails}) {
         <Typography variant="body1">Time: {eventDetails.startTime.toLocaleTimeString()} - {eventDetails.endTime.toLocaleTimeString()}</Typography>
         <Typography variant="body2">EventType: {eventDetails.eventType}</Typography>
         <Typography variant="body2">Description: {eventDetails.desc}</Typography>
+        <Button onClick = {deleteEventBtn}>
+          Delete Event
+        </Button>
       </CardContent>
     </Card>
   );

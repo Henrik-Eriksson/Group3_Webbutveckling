@@ -5,7 +5,6 @@ function CreateEvent({closeDialog, addEvent, setSelectedDates, selectedDates, cl
   const [eventType, setEventType] = useState('');
   let endDate = null;
 
-
   useEffect(() => {
    // console.log(selectedDates);
     let date = new Date(selectedDates[selectedDates.length - 1]);
