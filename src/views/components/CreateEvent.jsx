@@ -1,5 +1,6 @@
 import React, { useState, useEffect} from "react";
 import { Button, TextField, Typography, FormControl, InputLabel, Select, MenuItem, Paper, Grid } from "@mui/material";
+import { Tooltip } from "@mui/material";
 
 function CreateEvent({closeDialog, addEvent, setSelectedDates, selectedDates, clearSelectedDates}) {
   const [eventType, setEventType] = useState('');
@@ -21,6 +22,50 @@ function CreateEvent({closeDialog, addEvent, setSelectedDates, selectedDates, cl
     endTime: ''
   });
 
+const [searchQuery, setSearchQuery] = useState('');
+const [filteredUsers, setFilteredUsers] = useState([]);
+const [inviteInputValue, setInviteInputValue] = useState('');
+
+  const users = [
+  { id: 1, name: 'Henrik', avatar: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' },
+  { id: 2, name: 'Aron', avatar: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' },
+  { id: 3, name: 'Johan', avatar: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' },
+  { id: 4, name: 'Mohammad', avatar: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' },
+  { id: 5, name: 'Dog', avatar: 'https://image.petmd.com/files/styles/978x550/public/dog-allergies.jpg' }
+];
+
+
+const [selectedUsers, setSelectedUsers] = useState([]);
+
+
+const handleInviteInputChange = (e) => {
+  const value = e.target.value;
+  const mentionedUsers = value.match(/@\w+/g) || [];
+  setSelectedUsers(mentionedUsers.map(u => u.slice(1))); // Remove '@' from the beginning
+
+  if (value.includes('@')) {
+    const query = value.split('@').pop();
+    setSearchQuery(query);
+    const filtered = users.filter(user => 
+      user.name.toLowerCase().includes(query.toLowerCase()) && 
+      !mentionedUsers.includes(`@${user.name}`)
+    );
+    setFilteredUsers(filtered);
+  } else {
+    setSearchQuery('');
+    setFilteredUsers([]);
+  }
+};
+
+
+const handleUserSelect = (user) => {
+  const currentValue = document.getElementById('inviteInput').value;
+  const position = currentValue.lastIndexOf(`@${searchQuery}`);
+  const newValue = `${currentValue.substring(0, position)}@${user.name} ${currentValue.substring(position + searchQuery.length + 1)}`;
+  document.getElementById('inviteInput').value = newValue;
+  handleInviteInputChange({ target: { value: newValue } }); // Re-filter the list
+};
+
   const menuItems = [
     "Business Meeting",
     "Social Event",
@@ -34,6 +79,8 @@ function CreateEvent({closeDialog, addEvent, setSelectedDates, selectedDates, cl
     "Gaming Event",
     "Other"
   ];
+
+
 
   const handleEventTypeChange = (event) => {
     setEventType(event.target.value);
@@ -126,7 +173,48 @@ function CreateEvent({closeDialog, addEvent, setSelectedDates, selectedDates, cl
       <Paper style={{ padding: '20px', width: '80%', maxWidth: '500px', backgroundColor: 'rgba(255, 255, 255, 0.0)', boxShadow: 'none' }}>
         <TextField fullWidth margin="normal" label="Event Name" variant="outlined" onChange={(e) => setFormData({ ...formData, title: e.target.value })} style={{ backgroundColor: 'white' }} />
         <TextField fullWidth margin="normal" label="Event Description" onChange={(e) => setFormData({ ...formData, desc: e.target.value })} variant="outlined" style={{ backgroundColor: 'white' }} />
-        <TextField fullWidth margin="normal" label="Invite friends" variant="outlined" style={{ backgroundColor: 'white' }} />
+ <div style={{ position: 'relative' }}>
+<Tooltip title="Type '@' to invite friends">
+  <TextField 
+    id="inviteInput"
+    fullWidth 
+    margin="normal" 
+    label="Invite friends" 
+    variant="outlined" 
+    onChange={handleInviteInputChange} 
+    style={{ backgroundColor: 'white' }} 
+  />
+</Tooltip>
+
+    <div style={{ 
+      position: 'absolute', 
+      top: '100%', 
+      left: 0, 
+      width: '100%', 
+      backgroundColor: 'white', 
+      boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)', 
+      zIndex: 2, 
+      maxHeight: '150px', 
+      overflowY: 'auto' 
+    }}>
+      {filteredUsers.map(user => (
+        <div 
+          key={user.id} 
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            padding: '10px', 
+            borderBottom: '1px solid #f0f0f0', 
+            cursor: 'pointer' 
+          }}
+          onClick={() => handleUserSelect(user)}
+        >
+          <img src={user.avatar} alt={user.name} style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '10px' }} />
+          {user.name}
+        </div>
+      ))}
+    </div>
+  </div>
         <TextField fullWidth margin="normal" label="     Start Time" type="time" onChange={(e) => setFormData({ ...formData, startTime: e.target.value })} variant="outlined" style={{ backgroundColor: 'white' }} />
         <TextField fullWidth margin="normal" label="     End Time" type="time" onChange={(e) => setFormData({ ...formData, endTime: e.target.value })} variant="outlined" style={{ backgroundColor: 'white' }}  />
         <FormControl fullWidth variant="outlined" margin="normal" style={{ backgroundColor: 'white' }}>
