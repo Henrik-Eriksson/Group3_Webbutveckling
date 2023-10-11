@@ -44,7 +44,7 @@ function ResponsiveAppBar() {
 
     const intervalId = setInterval(() => {
       fetchInvites();
-    }, 300000); // Fetch every 5 minutes
+    }, 10000); // Fetch every 5 minutes
 
     return () => clearInterval(intervalId); // Cleanup on component unmount
 }, []);
