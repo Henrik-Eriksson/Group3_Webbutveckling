@@ -15,7 +15,9 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/ReactToastify.min.css";
 import NotificationCenter from './NotificationCenter.jsx';
-
+import { authenticate } from '../../app.jsx'
+import { useState, useEffect} from "react";
+import axios from 'axios';
 const pages = ['Home', 'Calendar', 'Profile', 'Account'];
 const links = ['', 'calendar', 'profile', 'account']; 
 const settings = ['Profile', 'Account', 'Logout'];
@@ -25,6 +27,40 @@ const types = ["success", "info", "warning", "error"];
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [invites, setInvites] = useState([]);
+
+  const fetchInvites = async () => {
+    try {
+      const userId = await authenticate();
+      const response = await axios.get(`http://localhost:5050/api/invites/receivedInvites/${userId}`);
+      setInvites(response.data);
+    } catch (error) {
+      console.error("Error fetching invites:", error);
+    }
+  };
+
+  useEffect(() => {
+  fetchInvites(); // Fetch invites immediately on component mount
+
+    const intervalId = setInterval(() => {
+      fetchInvites();
+    }, 300000); // Fetch every 5 minutes
+
+    return () => clearInterval(intervalId); // Cleanup on component unmount
+}, []);
+
+
+const [prevInvitesCount, setPrevInvitesCount] = useState(0);
+
+useEffect(() => {
+  if (invites.length > prevInvitesCount) {
+    toast("You have a new invite!", {
+      type: "info"
+    });
+    setPrevInvitesCount(invites.length);
+  }
+}, [invites]);
+
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -156,8 +192,9 @@ function ResponsiveAppBar() {
               <MenuIcon />
             </Tooltip>
           </IconButton>
-          
-          <NotificationCenter/>
+
+          <NotificationCenter newInvitesCount={invites.length} />
+
           <ToastContainer position="bottom-right" newestOnTop />
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">

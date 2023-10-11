@@ -1,11 +1,34 @@
 import React, { useState, useEffect} from "react";
 import { Button, TextField, Typography, FormControl, InputLabel, Select, MenuItem, Paper, Grid } from "@mui/material";
 import { Tooltip } from "@mui/material";
+import { authenticate } from '../../app.jsx'
+import axios from 'axios';
 
 function CreateEvent({closeDialog, addEvent, setSelectedDates, selectedDates, clearSelectedDates}) {
+
   const [eventType, setEventType] = useState('');
   const [backgroundColor, setBackgroundColor] = useState('black');
   let endDate = null;
+  const fetchUsers = async () => {
+    try {
+        const response = await axios.get('http://localhost:5050/api/users');
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        return [];
+    }
+};
+
+useEffect(() => {
+    const fetchData = async () => {
+        //const userId = await authenticate();
+        const fetchedUsers = await fetchUsers();
+        setUsers(fetchedUsers);
+    };
+
+    fetchData();
+}, []);
+
 
   useEffect(() => {
    // console.log(selectedDates);
@@ -26,16 +49,29 @@ const [searchQuery, setSearchQuery] = useState('');
 const [filteredUsers, setFilteredUsers] = useState([]);
 const [inviteInputValue, setInviteInputValue] = useState('');
 
-  const users = [
-  { id: 1, name: 'Henrik', avatar: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' },
-  { id: 2, name: 'Aron', avatar: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' },
-  { id: 3, name: 'Johan', avatar: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' },
-  { id: 4, name: 'Mohammad', avatar: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' },
-  { id: 5, name: 'Dog', avatar: 'https://image.petmd.com/files/styles/978x550/public/dog-allergies.jpg' }
-];
+const [users, setUsers] = useState([]);
+
 
 
 const [selectedUsers, setSelectedUsers] = useState([]);
+
+const sendInvitations = async (eventId) => {
+  try {
+    for (let username of selectedUsers) {
+      const user = users.find(u => u.username === username);
+      if (user) {
+        const inviteData = {
+          eventId: eventId,
+          inviter: await authenticate(), 
+          invited: user._id
+        };
+        await axios.post('http://localhost:5050/api/invites/createInvite', inviteData);
+      }
+    }
+  } catch (error) {
+    console.error("Error sending invitations:", error);
+  }
+};
 
 
 const handleInviteInputChange = (e) => {
@@ -46,10 +82,11 @@ const handleInviteInputChange = (e) => {
   if (value.includes('@')) {
     const query = value.split('@').pop();
     setSearchQuery(query);
-    const filtered = users.filter(user => 
-      user.name.toLowerCase().includes(query.toLowerCase()) && 
-      !mentionedUsers.includes(`@${user.name}`)
-    );
+  const filtered = users.filter(user => 
+      user.username && user.username.toLowerCase().includes(query.toLowerCase()) && 
+      !mentionedUsers.includes(`@${user.username}`)
+  );
+
     setFilteredUsers(filtered);
   } else {
     setSearchQuery('');
@@ -61,7 +98,7 @@ const handleInviteInputChange = (e) => {
 const handleUserSelect = (user) => {
   const currentValue = document.getElementById('inviteInput').value;
   const position = currentValue.lastIndexOf(`@${searchQuery}`);
-  const newValue = `${currentValue.substring(0, position)}@${user.name} ${currentValue.substring(position + searchQuery.length + 1)}`;
+  const newValue = `${currentValue.substring(0, position)}@${user.username} ${currentValue.substring(position + searchQuery.length + 1)}`;
   document.getElementById('inviteInput').value = newValue;
   handleInviteInputChange({ target: { value: newValue } }); // Re-filter the list
 };
@@ -152,6 +189,7 @@ const handleUserSelect = (user) => {
     console.log(endTime.toString());
     console.log(startTime.toString());
     //TODO: add to DB and retrieve
+    sendInvitations(newEvent.id);
     addEvent(newEvent);
     
     clearSelectedDates();
@@ -209,8 +247,8 @@ const handleUserSelect = (user) => {
           }}
           onClick={() => handleUserSelect(user)}
         >
-          <img src={user.avatar} alt={user.name} style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '10px' }} />
-          {user.name}
+          <img src={user.profilePicture} alt={user.username} style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '10px' }} />
+          {user.username}
         </div>
       ))}
     </div>
