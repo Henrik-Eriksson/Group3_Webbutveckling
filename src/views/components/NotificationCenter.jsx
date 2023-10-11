@@ -47,7 +47,10 @@ const Container = styled(motion.aside)`
   border-radius: 8px;
   overflow: hidden;
   z-index: 1;
+  visibility: ${props => props.isOpen ? 'visible' : 'hidden'};
+  pointer-events: ${props => props.isOpen ? 'auto' : 'none'};
 `;
+
 
 
 const Footer = styled.footer`
@@ -65,6 +68,7 @@ const NotificationWrapper = styled.div`
 
 const Content = styled(motion.section)`
   background: #fff;
+  pointer-events: auto;  // Always keep the content interactive
   height: 400px;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -116,7 +120,7 @@ const NotificationCenter = () => {
 
     <NotificationWrapper>
       <Trigger onClick={() => setIsOpen(!isOpen)} count={unreadCount} />
-      <Container initial={false} variants={variants.container} animate={isOpen ? "open" : "closed"}>
+      <Container initial={false} isOpen = {isOpen} variants={variants.container} animate={isOpen ? "open" : "closed"}>
         <Header>
           <h3>Notifications</h3>
           <UnreadFilter>
