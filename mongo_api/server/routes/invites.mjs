@@ -60,7 +60,7 @@ router.delete("/invite/:id", async (req, res) => {
 router.get("/receivedInvites/:userId", async (req, res) => {
   try {
     let collection = await db.collection("invites");
-    let query = { invited: new ObjectId(req.params.userId) };
+    let query = { invited: req.params.userId };
     let results = await collection.find(query).toArray();
     if (results.length === 0) {
       res.status(404).send({message: "No invites found for this user", result: results});

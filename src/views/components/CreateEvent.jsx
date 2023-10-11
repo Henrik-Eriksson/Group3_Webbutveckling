@@ -62,8 +62,8 @@ const sendInvitations = async (eventId) => {
       if (user) {
         const inviteData = {
           eventId: eventId,
-          inviter: new ObjectId(await authenticate()), 
-          invited: new ObjectId(user._id)
+          inviter: await authenticate(), 
+          invited: user._id
         };
         await axios.post('http://localhost:5050/api/invites/createInvite', inviteData);
       }
