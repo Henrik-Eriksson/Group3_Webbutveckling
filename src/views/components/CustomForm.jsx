@@ -29,7 +29,7 @@ function CustomForm(props) {
         <form onSubmit={props.onSubmit}>
         <FormGroup>
           {inputFields}
-          <Button type="submit" variant="contained">{props.buttonName}</Button>
+          <Button type="submit" variant="contained" sx = {{backgroundColor: "#F6D58D"}}>{props.buttonName}</Button>
         </FormGroup>
         </form>
         {extraComponents}
