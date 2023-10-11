@@ -49,4 +49,19 @@
     padding: 20px 40px;
   }
 
+  .fc-toolbar-title {
+    color: #F6D58D;
+    font-family: Arial, sans-serif !important;
+    font-size: 1000px;
+    }
 
+    .css-1ps6pg7-MuiPaper-root{
+      font-size: 1000px;
+    }
+
+    .css-1ps6pg7-MuiPaper-root{
+      color: red;
+    }
+    .css-1ps6pg7-MuiPaper-root{
+      color: red !important;
+    }
