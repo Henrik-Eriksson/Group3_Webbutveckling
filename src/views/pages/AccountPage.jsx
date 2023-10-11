@@ -4,26 +4,16 @@ import BuildIcon from '@mui/icons-material/Build';
 import EditIcon from '@mui/icons-material/Edit';
 import ResponsiveAppBar from "../components/ResponsiveAppBar.jsx";
 
-const UserProfile = () => {
-  const [userData, setUserData] = useState(null); 
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      // Assuming you have an endpoint "/user/me" that returns the data of the logged-in user.
-      const response = await fetch("/user/me"); 
-      if (response.ok) {
-        const data = await response.json();
-        setUserData(data);
-      }
-    };
-
-    fetchUserData();
-  }, []); // Empty dependency array means this effect runs once when component mounts
-
-  if (!userData) return "Loading..."; // Or some loading spinner
-
-  // ... rest of the component
+const sampleUserData = {
+  id: 1,
+  firstname: "John",
+  lastname: "Doe",
+  eventcount: "42",
+  username: "exampleUser123",
+  email: "john.doe@example.com",
+  profilePicture: "https://via.placeholder.com/150",
 };
+
 
 function Accountpage() {
   const [avatarSrc, setAvatarSrc] = useState(sampleUserData.profilePicture);
