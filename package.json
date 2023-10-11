@@ -19,6 +19,7 @@
     "@mui/material": "^5.14.10",
     "@mui/x-date-pickers": "^6.16.0",
     "date-fns": "^2.30.0",
+    "mongoose": "^7.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0"
