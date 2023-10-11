@@ -49,6 +49,17 @@ router.delete("/:id", async (req, res) => {
   res.send(result).status(200);
 });
 
+// This section will help you get a username by user id
+router.get("/usernameFromId/:id", async (req, res) => {
+  let collection = await db.collection("users");
+  let query = {_id: new ObjectId(req.params.id)};
+  let result = await collection.findOne(query, { projection: { username: 1 } }); // Only fetch the username field
+
+  if (!result) res.status(404).send({ message: "User not found" });
+  else res.status(200).send({ username: result.username });
+});
+
+
 //  ANYONE CAN USE API CALLS ****************************************
 //-------------------------------------------------------------------
 //Checks if a given username or email exists
@@ -90,6 +101,7 @@ async function loginUser(userId, res) {
   res.status(200).send(sessionId);
 }
 
+
 //USED FOR SIGNUP
 router.post("/signup", async (req, res) => {
   const currentTimestamp = Math.floor(Date.now() / 1000);
@@ -130,6 +142,7 @@ router.post("/login", async (req, res) => {
   let query = {username: req.body.username};
   let result = await collection.findOne(query);
   if (!result) return res.status(401).send({"error": "username"}); //username couldnt be found 
+  let userId = result._id;
 
   if(String(result.password) != String(req.body.password)) return res.status(401).send({"error": "password"}); //wrong password 
   //TODO: hash req password when fixed hashing
@@ -146,7 +159,7 @@ router.post("/login", async (req, res) => {
   if (!result) return res.status(500).send({"error": "fatal"}); //couldnt update lastlloggedin? this error shouldnt happen
 
   //Step 3 log in
-  await loginUser(result.insertedId, res);
+  await loginUser(userId, res);
 }); 
 
 router.get("/getPassword/:username", async (req, res) => {
@@ -156,6 +169,87 @@ router.get("/getPassword/:username", async (req, res) => {
 
   if (!result) res.status(200).send(false);
   else res.status(200).send(result.password);
+});
+
+
+//EVENTS
+
+
+router.post("/createEvent", async (req, res) => {
+  const currentTimestamp = Math.floor(Date.now() / 1000); 
+
+  let collection = await db.collection("events");
+  
+  try {
+    let result = await collection.insertOne(req.body);
+    
+    if (result.acknowledged) {
+      res.status(200).send({ message: "Event added successfully" });
+    } else {
+      res.status(500).send({ message: "Failed to add event" });
+    }
+
+  } catch (error) {
+    console.error("Error inserting event:", error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
+
+// Delete an event based on its nested event.id
+router.delete("/deleteEvent/:eventId", async (req, res) => {
+  try {
+    // Connect to the events collection
+    let collection = await db.collection("events");
+
+    // Use the provided eventId
+    let eventId = req.params.eventId;
+
+    // Delete the event using the nested structure
+    let result = await collection.deleteOne({ "event.id": eventId });
+
+    // Check if the operation was acknowledged
+    if (result.acknowledged) {
+      res.status(200).send({ message: "Event deleted successfully" });
+    } else {
+      res.status(404).send({ message: "Event not found or deletion not acknowledged" });
+    }
+  } catch (error) {
+    console.error("Error deleting event:", error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
+
+
+router.post("/getEvents", async (req, res) => {
+  try {
+    let collection = await db.collection("events");
+    let query = { userId: req.body.userId };
+    
+    // Find all events for the user
+    let results = await collection.find(query).toArray();
+
+    // Extract only the 'event' field from each result
+    let events = results.map(entry => entry.event);
+
+    res.status(200).send(events);
+  } catch (error) {
+    console.error("Error fetching events:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+
+//GET USERID FROM SESSIONID
+router.post("/userId", async (req, res) => {
+  const currentTimestamp = Math.floor(Date.now() / 1000);
+
+  let collection = await db.collection("sessions");
+  let query = {session: req.body.sessionId};
+  let result = await collection.findOne(query);
+
+  if(!result) res.status(500).send(result);
+  else res.status(200).send(result);
 });
 
 export default router;

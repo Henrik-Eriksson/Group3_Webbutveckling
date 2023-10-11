@@ -12,13 +12,87 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-
-const pages = ['Home', 'Calender', 'Profile', 'Account'];
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/ReactToastify.min.css";
+import NotificationCenter from './NotificationCenter.jsx';
+import { authenticate } from '../../app.jsx'
+import { useState, useEffect} from "react";
+import axios from 'axios';
+const pages = ['Home', 'Calendar', 'Profile', 'Account'];
+const links = ['', 'calendar', 'profile', 'account']; 
 const settings = ['Profile', 'Account', 'Logout'];
+const types = ["success", "info", "warning", "error"];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [invites, setInvites] = useState([]);
+  const [inviterUsername, setInviterUsername] = useState(''); // State to hold the inviter's username
+
+
+const fetchInvites = async () => {
+  try {
+    const userId = await authenticate();
+    const response = await axios.get(`http://localhost:5050/api/invites/receivedInvites/${userId}`);
+    const fetchedInvites = response.data;
+    const inviterUsernames = {};
+
+    // Fetch usernames for each inviter
+    for (let invite of fetchedInvites) {
+      if (invite.inviter) {
+        const usernameResponse = await fetchInviterUsername(invite.inviter);
+        inviterUsernames[invite.inviter] = usernameResponse;
+      }
+    }
+
+    // Now you have a map of inviter IDs to usernames in inviterUsernames
+    // You can use this map to display the usernames in your component
+
+    setInvites(fetchedInvites);
+  } catch (error) {
+    console.error("Error fetching invites:", error);
+  }
+};
+
+
+  const fetchInviterUsername = async (inviterId) => {
+    try {
+      const response = await axios.get(`http://localhost:5050/api/users/usernameFromId/${inviterId}`);
+      setInviterUsername(response.data.username);
+    } catch (error) {
+      console.error("Error fetching inviter's username:", error);
+    }
+  };
+
+useEffect(() => {
+    fetchInvites(); // Fetch invites immediately on component mount
+
+    const intervalId = setInterval(() => {
+      fetchInvites();
+    }, 50000); // Fetch every 10 seconds
+
+    return () => clearInterval(intervalId); // Cleanup on component unmount
+  }, []); // Empty dependency array so it only runs on mount and unmount
+
+
+
+const [prevInvitesCount, setPrevInvitesCount] = useState(0);
+
+useEffect(() => {
+  if (invites.length > prevInvitesCount) {
+    // Fetch the inviter's username only when a new invite is detected
+    const latestInvite = invites[invites.length - 1];
+    if (latestInvite && latestInvite.inviter) {
+      fetchInviterUsername(latestInvite.inviter).then(() => {
+        toast(`You have a new invite from ${inviterUsername}`, {
+          type: "info"
+        });
+      });
+    }
+    setPrevInvitesCount(invites.length);
+  }
+}, [invites, inviterUsername]);
+
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -28,8 +102,17 @@ function ResponsiveAppBar() {
   };
 
   const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
+    
+    setAnchorElUser(null);
   };
+
+  const handleClickNavMenu = (page) => {
+   
+    window.location.replace("/" + links[pages.indexOf(page)]);
+  };
+
+
+  
 
   const handleClickUserMenu = (setting) => {
     setAnchorElUser(null);
@@ -40,8 +123,14 @@ function ResponsiveAppBar() {
     }
   };
 
+    const addNotification = () => {
+    toast("Lorem ipsum dolor sit amet, consectetur adipiscing elit", {
+      type: types[Math.floor(Math.random() * types.length)]
+    });
+  };
+
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx = {{backgroundColor: '#0F8294'}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -60,7 +149,7 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            TimeTuna
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -93,7 +182,7 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page} onClose={handleCloseNavMenu} onClick={() => handleClickNavMenu(page)}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
@@ -116,13 +205,13 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            TimeTuna
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={() => handleClickNavMenu(page)}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}
@@ -130,6 +219,15 @@ function ResponsiveAppBar() {
             ))}
           </Box>
 
+          <IconButton color="inherit" onClick={addNotification}>
+            <Tooltip title="Add Notification">
+              <MenuIcon />
+            </Tooltip>
+          </IconButton>
+
+          <NotificationCenter newInvitesCount={invites.length} />
+
+          <ToastContainer position="bottom-right" newestOnTop />
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

@@ -21,13 +21,15 @@ function CustomForm(props) {
   return (
     <Grid item xs={12} sm={10} md={6} sx={{p: {xl: 10, lg: 10, md: 0, xs: 0, sm: 0}, m: 0 }}>
       <Paper sx={{p:5, backgroundColor: 'rgba(255, 255, 255, 0.0)', boxShadow: 'none'}}>
-        <Typography sx={{color: props.titleColor}} variant="h4" gutterBottom align = "center">
-          {props.title}
-        </Typography>
+        {props.title && (  // Conditional rendering based on the presence of the title prop
+          <Typography sx={{color: props.titleColor}} variant="h4" gutterBottom align = "center">
+            {props.title}
+          </Typography>
+        )}
         <form onSubmit={props.onSubmit}>
         <FormGroup>
           {inputFields}
-          <Button type="submit" variant="contained">{props.buttonName}</Button>
+          <Button type="submit" variant="contained" sx = {{backgroundColor: "#F6D58D"}}>{props.buttonName}</Button>
         </FormGroup>
         </form>
         {extraComponents}

@@ -4,6 +4,45 @@ import Login from './views/pages/Login.jsx';
 import Signup from './views/pages/Signup.jsx';
 import Calendar from './views/pages/Calendar.jsx';
 import CreateEvent from './views/components/CreateEvent.jsx';
+import EventDetails from './views/components/EventDetails.jsx';
+import axios from 'axios';
+import ProfilePage from './views/pages/ProfilePage.jsx'; 
+import AccountPage from './views/pages/AccountPage.jsx'; 
+
+export async function authenticate()
+{
+
+   const longTermSessionId = localStorage.getItem('session');
+  const shortTermSessionId = sessionStorage.getItem('session');
+
+  let sessionIdToSave;
+
+  if (longTermSessionId) {
+      sessionIdToSave = longTermSessionId;
+  } else if (shortTermSessionId) {
+      sessionIdToSave = shortTermSessionId;
+  }
+
+    try {
+    const response = await axios.post('http://localhost:5050/api/users/userId', {
+      sessionId: sessionIdToSave
+    });
+
+
+    if (response.status === 200) {
+      return response.data.userId;
+    } else {
+      console.error("Couldn't authenticate and fetch userId");
+    }
+  } catch (error) {
+    console.error("An error occurred: " + error.message);
+  }
+
+  return null;
+
+  }
+
+
 
 const userIsLoggedIn = () => {
   const longTermSessionId = localStorage.getItem('session');
@@ -64,6 +103,9 @@ const App = () => {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/CreateEvent" element={<CreateEvent />} />
+        <Route path="/EventDetails" element={<EventDetails/>} />
+        <Route path="/Profile" element={<ProfilePage/>} /> 
+        <Route path="/Account" element={<AccountPage/>} />
       </Routes>
     </Router>
   );
