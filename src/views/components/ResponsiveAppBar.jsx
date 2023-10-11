@@ -12,11 +12,15 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/ReactToastify.min.css";
+import NotificationCenter from './NotificationCenter.jsx';
 
 const pages = ['Home', 'Calendar', 'Profile', 'Account'];
 const links = ['', 'calendar', 'profile', 'account']; 
 const settings = ['Profile', 'Account', 'Logout'];
+const types = ["success", "info", "warning", "error"];
+
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -49,6 +53,12 @@ function ResponsiveAppBar() {
     {
       window.location.href = "/logout";
     }
+  };
+
+    const addNotification = () => {
+    toast("Lorem ipsum dolor sit amet, consectetur adipiscing elit", {
+      type: types[Math.floor(Math.random() * types.length)]
+    });
   };
 
   return (
@@ -141,6 +151,14 @@ function ResponsiveAppBar() {
             ))}
           </Box>
 
+          <IconButton color="inherit" onClick={addNotification}>
+            <Tooltip title="Add Notification">
+              <MenuIcon />
+            </Tooltip>
+          </IconButton>
+          
+          <NotificationCenter/>
+          <ToastContainer position="bottom-right" newestOnTop />
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
