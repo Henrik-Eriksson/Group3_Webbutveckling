@@ -9,6 +9,9 @@ import { ItemActions } from "./ItemActions";
 import { Switch } from "./Switch";
 import { TimeTracker } from "./TimeTracker";
 import axios from 'axios';
+import { authenticate } from '../../app.jsx'
+
+
 
 const variants = {
   container: {
@@ -114,22 +117,62 @@ const NotificationCenter = () => {
     unreadCount
   } = useNotificationCenter();
 
+const customClear =  () =>
+{
+
+  notifications.forEach((notification) => declineInvite(notification.data.inviteId,notification));
+  clear();
+}
+
   const [showUnreadOnly, toggleFilter] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-const acceptInvite = async (inviteId) => {
+  const fetchEvent = async (eventId) => {
     try {
-      await axios.patch(`http://localhost:5050/api/invites/acceptInvite/${inviteId}`);
-      // Refresh the notifications after accepting
-      // ... your fetchNotifications function here
+      const response = await axios.get(`http://localhost:5050/api/users/event/${eventId}`);
+      return response.data.event;
     } catch (error) {
-      console.error("Error accepting invite:", error);
+      console.error("Error fetching data from the target event:", error);
     }
-  };
 
-  const declineInvite = async (inviteId) => {
-    remove();
+    
   };
+const acceptInvite = async (inviteId, eventId, notification) => {
+
+    remove(notification.id);
+
+    let eventData = await fetchEvent(eventId)
+    let userId = await authenticate();
+    const createEventResponse = await axios.post(`http://localhost:5050/api/users/createEvent`, {event: eventData, userId: userId, shared: []});
+  if (createEventResponse.status !== 200) {
+    console.error("Error creating the new event");
+    return;
+  }
+
+  try {
+    await axios.delete(`http://localhost:5050/api/invites/invite/${inviteId}`);
+    // Refresh the notifications or remove the specific notification from the list
+  } catch (error) {
+    console.error("Error removing the invite", error);
+  }
+};
+
+  //remove(notification.id)
+
+const declineInvite = async (inviteId,notification) => {
+  console.log(inviteId);
+  remove(notification.id);
+  try {
+    await axios.delete(`http://localhost:5050/api/invites/invite/${inviteId}`);
+    // Refresh the notifications or remove the specific notification from the list
+  } catch (error) {
+    console.error("Error declining invite:", error);
+  }
+
+
+
+};
+
 
   return (
 
@@ -161,8 +204,8 @@ const acceptInvite = async (inviteId) => {
                       <div>{notification.content}</div>
                       <TimeTracker createdAt={notification.createdAt} />
                                     <div>
-                <button onClick={() => acceptInvite(notification.inviteId)}>Accept</button>
-                <button onClick={() => declineInvite(notification.inviteId)}>Decline</button>
+                <button onClick={() => acceptInvite(notification.data.inviteId, notification.data.eventId,notification)}>Accept</button>
+                <button onClick={() => declineInvite(notification.data.inviteId,notification)}>Decline</button>
               </div>
                     </div>
                     <ItemActions notification={notification} markAsRead={markAsRead} remove={remove} />
@@ -173,7 +216,7 @@ const acceptInvite = async (inviteId) => {
           </Content>
         </AnimatePresence>
         <Footer>
-          <button onClick={clear}>Clear All</button>
+          <button onClick={customClear}>Clear All</button>
           <button onClick={markAllAsRead}>Mark All as read</button>
         </Footer>
       </Container>

@@ -28,6 +28,13 @@ function ResponsiveAppBar() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [invites, setInvites] = useState([]);
   const [inviterUsername, setInviterUsername] = useState(''); // State to hold the inviter's username
+  const [toastMap, setToastMap] = useState({});
+
+
+const playNotificationSound = () => {
+  const audio = new Audio('src/assets/pling.mp3'); // Adjust the path if your audio file is located elsewhere
+  audio.play();
+};
 
 
 const fetchInvites = async () => {
@@ -69,7 +76,7 @@ useEffect(() => {
 
     const intervalId = setInterval(() => {
       fetchInvites();
-    }, 50000); // Fetch every 10 seconds
+    }, 5000); // Fetch every 10 seconds
 
     return () => clearInterval(intervalId); // Cleanup on component unmount
   }, []); // Empty dependency array so it only runs on mount and unmount
@@ -80,18 +87,28 @@ const [prevInvitesCount, setPrevInvitesCount] = useState(0);
 
 useEffect(() => {
   if (invites.length > prevInvitesCount) {
-    // Fetch the inviter's username only when a new invite is detected
-    const latestInvite = invites[invites.length - 1];
-    if (latestInvite && latestInvite.inviter) {
-      fetchInviterUsername(latestInvite.inviter).then(() => {
-        toast(`You have a new invite from ${inviterUsername}`, {
-          type: "info"
-        });
-      });
-    }
+    const newInvites = invites.slice(prevInvitesCount); // Get only the new invites
+
+    newInvites.forEach(async (invite) => {
+      if (invite.inviter) {
+        try {
+          const response = await axios.get(`http://localhost:5050/api/users/usernameFromId/${invite.inviter}`);
+          const inviterUsername = response.data.username;
+          toast(`You have a new invite from ${inviterUsername}`, {
+            type: "info",
+            data: { inviteId: invite._id, eventId: invite.eventId }
+          });
+          playNotificationSound(); 
+        } catch (error) {
+          console.error("Error fetching inviter's username:", error);
+        }
+      }
+    });
+
     setPrevInvitesCount(invites.length);
   }
-}, [invites, inviterUsername]);
+}, [invites]);
+
 
 
   const handleOpenNavMenu = (event) => {
@@ -133,7 +150,7 @@ useEffect(() => {
     <AppBar position="static" sx = {{backgroundColor: '#0F8294'}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <Avatar src= "../../src/assets/Fish_icon.png" sx={{ display: { xs: 'none', md: 'inline'}, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -188,7 +205,7 @@ useEffect(() => {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <Avatar src= "../../src/assets/Fish_icon.png" sx={{ display: { xs: 'flex', md: 'none'}, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -219,11 +236,11 @@ useEffect(() => {
             ))}
           </Box>
 
-          <IconButton color="inherit" onClick={addNotification}>
+          {/*<IconButton color="inherit" onClick={addNotification}>
             <Tooltip title="Add Notification">
               <MenuIcon />
             </Tooltip>
-          </IconButton>
+          </IconButton>*/}
 
           <NotificationCenter newInvitesCount={invites.length} />
 
@@ -231,7 +248,7 @@ useEffect(() => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Remy Sharp" sx={{ml: 5}} src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
             <Menu

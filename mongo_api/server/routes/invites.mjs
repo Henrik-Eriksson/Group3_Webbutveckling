@@ -47,6 +47,25 @@ router.patch("/invite/:id", async (req, res) => {
   res.send(result).status(200);
 });
 
+
+// Accept an invite
+router.patch("/acceptInvite/:id", async (req, res) => {
+  const query = { _id: new ObjectId(req.params.id) };
+  let collection = await db.collection("invites");
+  let invite = await collection.findOne(query);
+  if (!invite) {
+    return res.status(404).send({ message: "Invite not found" });
+  }
+  const eventId = invite.eventId; // Assuming your invite has an eventId field
+  
+  // Now, you can use the eventId for whatever you want, e.g., adding the user to the event attendees list
+  
+  // After that, remove the invite
+  await collection.deleteOne(query);
+  res.status(200).send({ message: "Invite accepted and removed", eventId });
+});
+
+
 //DELETE EVENT BY ID
 router.delete("/invite/:id", async (req, res) => {
   const query = { _id: new ObjectId(req.params.id) };

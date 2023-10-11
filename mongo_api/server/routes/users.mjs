@@ -58,6 +58,25 @@ router.get("/usernameFromId/:id", async (req, res) => {
   else res.status(200).send({ username: result.username });
 });
 
+// Backend: Fetch an event by its ID
+router.get("/event/:eventId", async (req, res) => {
+  try {
+    let collection = await db.collection("events");
+    let query = { "event.id": req.params.eventId };
+    let result = await collection.findOne(query);
+
+    if (!result) {
+      res.status(404).send({ message: "Event not found" });
+    } else {
+      res.status(200).send(result);
+    }
+  } catch (error) {
+    console.error("Error fetching event:", error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
+
+
 
 //  ANYONE CAN USE API CALLS ****************************************
 //-------------------------------------------------------------------
