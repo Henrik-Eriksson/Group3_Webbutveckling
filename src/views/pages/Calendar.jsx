@@ -214,11 +214,11 @@ function handleDateClick(info) {
     if (selectedDates.includes(dateStr)) {
         // Remove the date from the selectedDates array
         setSelectedDates(prevDates => prevDates.filter(date => date !== dateStr));
-        info.dayEl.style.backgroundColor = 'gray';
+        info.dayEl.style.backgroundColor = 'rgba(205, 209, 228,0)';
     } else {
         // Add the date to the selectedDates array
         setSelectedDates(prevDates => [...prevDates, dateStr]);
-        info.dayEl.style.backgroundColor = 'rgba(205, 209, 228,0)';
+        info.dayEl.style.backgroundColor = 'gray';
     }
 }
 
