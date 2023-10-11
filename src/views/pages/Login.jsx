@@ -84,10 +84,22 @@ const handleSubmit = async (e) => {
     }}>
 
     <Grid container spacing={0} sx={{p: 5, alignItems: 'center', justifyContent: 'center' }}>        
-      <CustomInfoBox title="Welcome to our application" text="this is a example text for our application. this is a example text for our application. this is a example text for our application. 
-            this is a example text for our application. this is a example text for our application. this is a example text for our application. 
-            this is a example text for our application. this is a example text for our application. this is a example text for our application. 
-            this is a example text for our application. this is a example text for our application. this is a example text for our application. "/>
+      <CustomInfoBox title="Welcome to TimeTuna" text={
+        <Typography variant="h5" >
+          <br></br>
+          {"TimeTuna a application that allows you to create events and manage your schedule."}
+          <br></br>
+          <br></br>
+          {"Timetuna is a application that allows you to access your schedule from any device, anywhere."}
+          <br></br>
+          <br></br>
+          {"Timetuna is a collaborative application that allows you to invite others to your events effortlessly."}
+          <br></br>
+          <br></br>
+          {"Timetuna is free to use and is available on all platforms."}
+        </Typography>
+      }
+      />
         <CustomForm title = "Login To Your Account" titleColor = "White" buttonName="Login" onSubmit={handleSubmit}
         
         >
