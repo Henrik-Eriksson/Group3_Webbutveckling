@@ -48,6 +48,17 @@ router.delete("/:id", async (req, res) => {
   res.send(result).status(200);
 });
 
+// This section will help you get a username by user id
+router.get("/usernameFromId/:id", async (req, res) => {
+  let collection = await db.collection("users");
+  let query = {_id: new ObjectId(req.params.id)};
+  let result = await collection.findOne(query, { projection: { username: 1 } }); // Only fetch the username field
+
+  if (!result) res.status(404).send({ message: "User not found" });
+  else res.status(200).send({ username: result.username });
+});
+
+
 //  ANYONE CAN USE API CALLS ****************************************
 //-------------------------------------------------------------------
 //Checks if a given username or email exists

@@ -8,6 +8,7 @@ import { Trigger } from "./Trigger";
 import { ItemActions } from "./ItemActions";
 import { Switch } from "./Switch";
 import { TimeTracker } from "./TimeTracker";
+import axios from 'axios';
 
 const variants = {
   container: {
@@ -116,6 +117,20 @@ const NotificationCenter = () => {
   const [showUnreadOnly, toggleFilter] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
+const acceptInvite = async (inviteId) => {
+    try {
+      await axios.patch(`http://localhost:5050/api/invites/acceptInvite/${inviteId}`);
+      // Refresh the notifications after accepting
+      // ... your fetchNotifications function here
+    } catch (error) {
+      console.error("Error accepting invite:", error);
+    }
+  };
+
+  const declineInvite = async (inviteId) => {
+    remove();
+  };
+
   return (
 
     <NotificationWrapper>
@@ -145,6 +160,10 @@ const NotificationCenter = () => {
                     <div>
                       <div>{notification.content}</div>
                       <TimeTracker createdAt={notification.createdAt} />
+                                    <div>
+                <button onClick={() => acceptInvite(notification.inviteId)}>Accept</button>
+                <button onClick={() => declineInvite(notification.inviteId)}>Decline</button>
+              </div>
                     </div>
                     <ItemActions notification={notification} markAsRead={markAsRead} remove={remove} />
                   </Item>

@@ -23,43 +23,75 @@ const links = ['', 'calendar', 'profile', 'account'];
 const settings = ['Profile', 'Account', 'Logout'];
 const types = ["success", "info", "warning", "error"];
 
-
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [invites, setInvites] = useState([]);
+  const [inviterUsername, setInviterUsername] = useState(''); // State to hold the inviter's username
 
-  const fetchInvites = async () => {
+
+const fetchInvites = async () => {
+  try {
+    const userId = await authenticate();
+    const response = await axios.get(`http://localhost:5050/api/invites/receivedInvites/${userId}`);
+    const fetchedInvites = response.data;
+    const inviterUsernames = {};
+
+    // Fetch usernames for each inviter
+    for (let invite of fetchedInvites) {
+      if (invite.inviter) {
+        const usernameResponse = await fetchInviterUsername(invite.inviter);
+        inviterUsernames[invite.inviter] = usernameResponse;
+      }
+    }
+
+    // Now you have a map of inviter IDs to usernames in inviterUsernames
+    // You can use this map to display the usernames in your component
+
+    setInvites(fetchedInvites);
+  } catch (error) {
+    console.error("Error fetching invites:", error);
+  }
+};
+
+
+  const fetchInviterUsername = async (inviterId) => {
     try {
-      const userId = await authenticate();
-      const response = await axios.get(`http://localhost:5050/api/invites/receivedInvites/${userId}`);
-      setInvites(response.data);
+      const response = await axios.get(`http://localhost:5050/api/users/usernameFromId/${inviterId}`);
+      setInviterUsername(response.data.username);
     } catch (error) {
-      console.error("Error fetching invites:", error);
+      console.error("Error fetching inviter's username:", error);
     }
   };
 
-  useEffect(() => {
-  fetchInvites(); // Fetch invites immediately on component mount
+useEffect(() => {
+    fetchInvites(); // Fetch invites immediately on component mount
 
     const intervalId = setInterval(() => {
       fetchInvites();
-    }, 10000); // Fetch every 5 minutes
+    }, 50000); // Fetch every 10 seconds
 
     return () => clearInterval(intervalId); // Cleanup on component unmount
-}, []);
+  }, []); // Empty dependency array so it only runs on mount and unmount
+
 
 
 const [prevInvitesCount, setPrevInvitesCount] = useState(0);
 
 useEffect(() => {
   if (invites.length > prevInvitesCount) {
-    toast("You have a new invite!", {
-      type: "info"
-    });
+    // Fetch the inviter's username only when a new invite is detected
+    const latestInvite = invites[invites.length - 1];
+    if (latestInvite && latestInvite.inviter) {
+      fetchInviterUsername(latestInvite.inviter).then(() => {
+        toast(`You have a new invite from ${inviterUsername}`, {
+          type: "info"
+        });
+      });
+    }
     setPrevInvitesCount(invites.length);
   }
-}, [invites]);
+}, [invites, inviterUsername]);
 
 
   const handleOpenNavMenu = (event) => {

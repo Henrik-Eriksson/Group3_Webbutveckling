@@ -63,7 +63,7 @@ router.get("/receivedInvites/:userId", async (req, res) => {
     let query = { invited: req.params.userId };
     let results = await collection.find(query).toArray();
     if (results.length === 0) {
-      res.status(404).send({message: "No invites found for this user", result: results});
+      res.status(200).send({message: "No invites found for this user", result: results});
     } else {
       res.status(200).send(results);
     }
