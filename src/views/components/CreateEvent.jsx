@@ -200,7 +200,7 @@ const handleUserSelect = (user) => {
 
   return (
     <div style={{
-      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)),url(./src/assets/kissekatt.png)`,
+      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)),url(./src/assets/xd.png)`,
       backgroundSize: "cover",
       backgroundRepeat: "no-repeat",
       height: "auto",
@@ -209,8 +209,8 @@ const handleUserSelect = (user) => {
       justifyContent: "center"
     }}>
       <Paper style={{ padding: '20px', width: '80%', maxWidth: '500px', backgroundColor: 'rgba(255, 255, 255, 0.0)', boxShadow: 'none' }}>
-        <TextField fullWidth margin="normal" label="Event Name" variant="outlined" onChange={(e) => setFormData({ ...formData, title: e.target.value })} style={{ backgroundColor: 'white' }} />
-        <TextField fullWidth margin="normal" label="Event Description" onChange={(e) => setFormData({ ...formData, desc: e.target.value })} variant="outlined" style={{ backgroundColor: 'white' }} />
+        <TextField fullWidth margin="normal" label="Event Name" variant="filled" onChange={(e) => setFormData({ ...formData, title: e.target.value })} style={{ backgroundColor: 'white' }} />
+        <TextField fullWidth margin="normal" label="Event Description" onChange={(e) => setFormData({ ...formData, desc: e.target.value })} variant="filled" style={{ backgroundColor: 'white' }} />
  <div style={{ position: 'relative' }}>
 <Tooltip title="Type '@' to invite friends">
   <TextField 
@@ -218,7 +218,7 @@ const handleUserSelect = (user) => {
     fullWidth 
     margin="normal" 
     label="Invite friends" 
-    variant="outlined" 
+    variant="filled" 
     onChange={handleInviteInputChange} 
     style={{ backgroundColor: 'white' }} 
   />
@@ -253,9 +253,9 @@ const handleUserSelect = (user) => {
       ))}
     </div>
   </div>
-        <TextField fullWidth margin="normal" label="     Start Time" type="time" onChange={(e) => setFormData({ ...formData, startTime: e.target.value })} variant="outlined" style={{ backgroundColor: 'white' }} />
-        <TextField fullWidth margin="normal" label="     End Time" type="time" onChange={(e) => setFormData({ ...formData, endTime: e.target.value })} variant="outlined" style={{ backgroundColor: 'white' }}  />
-        <FormControl fullWidth variant="outlined" margin="normal" style={{ backgroundColor: 'white' }}>
+        <TextField fullWidth margin="normal" label="     Start Time" type="time" onChange={(e) => setFormData({ ...formData, startTime: e.target.value })} variant="filled" style={{ backgroundColor: 'white' }} />
+        <TextField fullWidth margin="normal" label="     End Time" type="time" onChange={(e) => setFormData({ ...formData, endTime: e.target.value })} variant="filled" style={{ backgroundColor: 'white' }}  />
+        <FormControl fullWidth variant="filled" margin="normal" style={{ backgroundColor: 'white' }}>
           <InputLabel>Event Type</InputLabel>
           <Select
             value={eventType}
@@ -267,7 +267,7 @@ const handleUserSelect = (user) => {
             ))}
           </Select>
         </FormControl>
-        <Button variant="contained" color="primary" onClick={handleCreateEvent} style={{ marginTop: '20px' }}>
+        <Button variant="contained" color="primary" onClick={handleCreateEvent} style={{ marginTop: '20px', width: 500, backgroundColor: "#F6D58D" }}>
           Create Event
         </Button>
       </Paper>
