@@ -2,6 +2,7 @@ import express from "express";
 import db from "../db/conn.mjs";
 import { ObjectId } from "mongodb";
 
+
 const router = express.Router();
 
 // This section will help you get a list of all the records.
@@ -21,22 +22,65 @@ router.get("/:id", async (req, res) => {
   else res.send(result).status(200);
 });
 
-// This section will help you update a record by id.
 router.patch("/:id", async (req, res) => {
   const query = { _id: new ObjectId(req.params.id) };
-  const updates =  {
-    $set: {
-      name: req.body.name,
-      position: req.body.position,
-      level: req.body.level
+
+  // If updating the password, first verify the current password
+  if (req.body.currentPassword && req.body.newPassword) {
+    let collection = await db.collection("users");
+    const user = await collection.findOne(query);
+
+    if (req.body.currentPassword !== user.password) {
+      return res.status(400).send({ message: "Current password is incorrect" });
     }
-  };
 
-  let collection = await db.collection("users");
-  let result = await collection.updateOne(query, updates);
+    // Construct the update object for user details and password
+    const updates = {
+      $set: {
+        ...req.body.firstName && { firstName: req.body.firstName },
+        ...req.body.lastName && { lastName: req.body.lastName },
+        ...req.body.email && { email: req.body.email },
+        ...req.body.username && { username: req.body.username },
+        ...req.body.profilePicture && { profilePicture: req.body.profilePicture },
+        password: req.body.newPassword
+      }
+    };
 
-  res.send(result).status(200);
+    let result = await collection.updateOne(query, updates);
+
+    if (result.matchedCount === 0) {
+      res.status(404).send({ message: "User not found" });
+    } else if (result.modifiedCount === 0) {
+      res.status(400).send({ message: "No changes made" });
+    } else {
+      res.status(200).send({ message: "User updated successfully" });
+    }
+  } else {
+    // Construct the update object for user details only
+    const updates = {
+      $set: {
+        ...req.body.firstName && { firstName: req.body.firstName },
+        ...req.body.lastName && { lastName: req.body.lastName },
+        ...req.body.email && { email: req.body.email },
+        ...req.body.username && { username: req.body.username },
+        ...req.body.profilePicture && { profilePicture: req.body.profilePicture }
+      }
+    };
+
+    let collection = await db.collection("users");
+    let result = await collection.updateOne(query, updates);
+
+    if (result.matchedCount === 0) {
+      res.status(404).send({ message: "User not found" });
+    } else if (result.modifiedCount === 0) {
+      res.status(400).send({ message: "No changes made" });
+    } else {
+      res.status(200).send({ message: "User updated successfully" });
+    }
+  }
 });
+
+
 
 // This section will help you delete a record
 router.delete("/:id", async (req, res) => {
@@ -47,6 +91,36 @@ router.delete("/:id", async (req, res) => {
 
   res.send(result).status(200);
 });
+
+// This section will help you get a username by user id
+router.get("/usernameFromId/:id", async (req, res) => {
+  let collection = await db.collection("users");
+  let query = {_id: new ObjectId(req.params.id)};
+  let result = await collection.findOne(query, { projection: { username: 1 } }); // Only fetch the username field
+
+  if (!result) res.status(404).send({ message: "User not found" });
+  else res.status(200).send({ username: result.username });
+});
+
+// Backend: Fetch an event by its ID
+router.get("/event/:eventId", async (req, res) => {
+  try {
+    let collection = await db.collection("events");
+    let query = { "event.id": req.params.eventId };
+    let result = await collection.findOne(query);
+
+    if (!result) {
+      res.status(404).send({ message: "Event not found" });
+    } else {
+      res.status(200).send(result);
+    }
+  } catch (error) {
+    console.error("Error fetching event:", error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
+
+
 
 //  ANYONE CAN USE API CALLS ****************************************
 //-------------------------------------------------------------------

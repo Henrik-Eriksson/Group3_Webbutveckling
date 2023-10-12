@@ -19,20 +19,35 @@ import { authenticate } from '../../app.jsx'
 
 
 export const StyleWrapper = styled.div`
+overflow-y:hidden;
 font-family: 'Roboto', sans-serif;
 font-size: 0.95em;  /* Adjust as needed */
 
   .fc-daygrid-day-frame:hover {
     background: rgba(205, 209, 228, .3);
-
   }
-
-      --fc-button-bg-color: purple;
-
-
-
-      .MuiDialog-paper {
-    overflow-y: auto;
+  .fc-media-screen {
+    background-image: url('./src/assets/hehehe.png');
+    background-size: cover; /* Adjust the image to cover the entire element */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-position: center; /* Centers the image */
+}
+.fc table
+{
+  font-size: 1.1em;
+  color: white;
+}
+.fc-toolbar-title{
+  font-size: 3em;
+  color: white
+}
+--fc-border-color: rgba(0,0,0,0);
+.fc-divider
+{
+  background-color: black;
+}
+fc-daygrid-day-frame {
+  background-color: rgba(205, 209, 228, .3);
 }
 `
 
@@ -86,7 +101,7 @@ const date2 = new Date("2023-10-12");
   function handleMouseLeave(info)
   {
     console.log(info);
-    info.dayEl.style.backgroundColor = 'white';
+    info.dayEl.style.backgroundColor = "rgba(0,0,0,0)";
   }
 
 function MyCalendar() {
@@ -199,11 +214,11 @@ function handleDateClick(info) {
     if (selectedDates.includes(dateStr)) {
         // Remove the date from the selectedDates array
         setSelectedDates(prevDates => prevDates.filter(date => date !== dateStr));
-        info.dayEl.style.backgroundColor = 'white';
+        info.dayEl.style.backgroundColor = 'rgba(205, 209, 228,0)';
     } else {
         // Add the date to the selectedDates array
         setSelectedDates(prevDates => [...prevDates, dateStr]);
-        info.dayEl.style.backgroundColor = 'rgba(205, 209, 228,1)';
+        info.dayEl.style.backgroundColor = 'gray';
     }
 }
 
@@ -295,10 +310,19 @@ function toLocalISOString(date) {
 
 
   return (
+    <div style={{
+      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),url(./src/assets/hejsan.png)`,
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
+      height: "100vh", // This will make sure the div takes the full viewport height
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }}>
     <Grid container spacing={0}>
       <ResponsiveAppBar />
 
-      <Grid item xs={12} style={{ height: '20px' }} /> 
+      <Grid item xs={12} style={{ height: '0px' }} /> 
 
       <Grid item xs={0} sm={1} md={2} lg={3}/>
 
@@ -347,6 +371,7 @@ function toLocalISOString(date) {
         <EventDetails deleteEvent={deleteEvent} closeDialog={handleClose} eventDetails={eventDetails}/>
         </Dialog>
     </Grid>
+    </div>
   );
 }
 export default MyCalendar;
