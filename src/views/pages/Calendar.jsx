@@ -33,6 +33,10 @@ font-size: 0.95em;  /* Adjust as needed */
     background-repeat: no-repeat; /* Prevents the image from repeating */
     background-position: center; /* Centers the image */
 }
+.css-14ogsoa-MuiModal-root-MuiPopover-root-MuiMenu-root
+{
+  margin-top: 0px !important;
+}
 .fc table
 {
   font-size: 1.1em;
@@ -166,11 +170,17 @@ function MyCalendar() {
     } else {
       console.log("Something went wrong while adding the event");
       console.log(response);
+              setSnackbarMessage("Something went wrong while adding the event");
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
     }
 
   } catch (error) {
     console.error("An error occurred while adding the event: " + error.message);
     console.log(response)
+           setSnackbarMessage("Something went wrong while adding the event" + error.message);
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
   }
 }
 
