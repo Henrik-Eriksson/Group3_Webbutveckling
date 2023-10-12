@@ -114,7 +114,7 @@ const handleSubmit = async (e) => {
 
   return (
     <div style={{
-      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)),url(./src/assets/kissekatt.png)`,
+      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)),url(./src/assets/xd.png)`,
       backgroundSize: "cover",
       backgroundRepeat: "no-repeat",
       overflow: "hidden",
@@ -139,7 +139,6 @@ const handleSubmit = async (e) => {
           <Link href="/login">
             {"Already have an account?"}
           </Link>
-          <p>Login with Google</p>
           {/*:::::::::::::::::::::::::::::*/}
           </Typography>
           
