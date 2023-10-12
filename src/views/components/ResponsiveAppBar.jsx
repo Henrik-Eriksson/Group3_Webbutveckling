@@ -29,6 +29,9 @@ function ResponsiveAppBar() {
   const [invites, setInvites] = useState([]);
   const [inviterUsername, setInviterUsername] = useState(''); // State to hold the inviter's username
   const [toastMap, setToastMap] = useState({});
+  const [userData, setUserData] = useState({
+  profilePicture: 'https://via.placeholder.com/150' // default image
+});
 
 
 const playNotificationSound = () => {
@@ -81,7 +84,20 @@ useEffect(() => {
     return () => clearInterval(intervalId); // Cleanup on component unmount
   }, []); // Empty dependency array so it only runs on mount and unmount
 
+useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userId = await authenticate();
+        const response = await fetch(`http://localhost:5050/api/users/${userId}`);
+        const data = await response.json();
+        setUserData(data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
 
+    fetchData();
+  }, []);
 
 const [prevInvitesCount, setPrevInvitesCount] = useState(0);
 
@@ -132,13 +148,17 @@ useEffect(() => {
   
 
   const handleClickUserMenu = (setting) => {
-    setAnchorElUser(null);
-    
-    if(setting == "Logout")
-    {
-      window.location.href = "/logout";
-    }
-  };
+  setAnchorElUser(null);
+  
+  if (setting === "Logout") {
+    window.location.href = "/logout";
+  } else if (setting === "Profile") {
+    window.location.href = "/profile";
+  } else if (setting === "Account") {
+    window.location.href = "/account";
+  }
+};
+
 
     const addNotification = () => {
     toast("Lorem ipsum dolor sit amet, consectetur adipiscing elit", {
@@ -248,7 +268,7 @@ useEffect(() => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" sx={{ml: 5}} src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Remy Sharp" sx={{ml: 5}} src={userData.profilePicture} />
               </IconButton>
             </Tooltip>
             <Menu
