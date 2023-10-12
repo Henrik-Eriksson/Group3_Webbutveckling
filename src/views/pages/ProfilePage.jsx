@@ -49,7 +49,7 @@ const UserProfile = () => {
           lastName: userData.lastName,
           email: userData.email,
           username: userData.username,
-          profilePicture: userData.profilePicture || sampleUserData.profilePicture
+          profilePicture: userData.profilePicture
         });
 
         setEventCount(events.length);

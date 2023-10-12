@@ -4,6 +4,8 @@ import BuildIcon from '@mui/icons-material/Build';
 import EditIcon from '@mui/icons-material/Edit';
 import ResponsiveAppBar from "../components/ResponsiveAppBar.jsx";
 import { authenticate } from '../../app.jsx'
+import { Snackbar, Alert } from "@mui/material";
+
 
 const sampleUserData = {
   id: 1,
@@ -22,6 +24,9 @@ function Accountpage() {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+const [snackbarOpen, setSnackbarOpen] = useState(false);
+const [snackbarMessage, setSnackbarMessage] = useState('');
+const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // can be 'error', 'warning', 'info', 'success'
 
   const [firstName, setFirstName] = useState();
 const [lastName, setLastName] = useState();
@@ -31,6 +36,14 @@ const [username, setUsername] = useState();
 const [password, setPassword] = useState();
 const [profilePicture, setProfilePicture] = useState();
  const fileInputRef = useRef(null); // Reference to the hidden file input
+
+const handleSnackbarClose = (event, reason) => {
+  if (reason === 'clickaway') {
+    return;
+  }
+  setSnackbarOpen(false);
+};
+
 
 const handleFirstNameChange = (e) => {
   setFirstName(e.target.value);
@@ -72,7 +85,7 @@ const handleUsernameChange = (e) => {
 
       const data = await response.json();
 
-      console.log(data);
+      //console.log(data);
       // Handle the server response here. For example, the server might return the URL of the uploaded image.
       if (data.success && data.imageUrl) {
         setAvatarSrc("/mongo_api/server/" + data.imageUrl);
@@ -80,9 +93,15 @@ const handleUsernameChange = (e) => {
         console.log("/mongo_api/server/" + data.imageUrl);
       } else {
         console.error('Error uploading image:', data.message);
+        setSnackbarMessage("Error uploading image: " + data.message);
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
+
       }
     } catch (error) {
-      console.error('Error uploading image:', error);
+        setSnackbarMessage("Error uploading image: " + error);
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
     }
   }
 };
@@ -103,10 +122,12 @@ useEffect(() => {
       setUsername(data.username);
       setProfilePicture(data.profilePicture);
       setAvatarSrc(data.profilePicture); // Preview the selected image
-      console.log(data.profilePicture + " OOOHAA");
       // Populate other states as necessary
     } catch (error) {
       console.error("Error fetching user data:", error);
+      setSnackbarMessage("Error fetching user data: " + error);
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
     }
   };
 
@@ -147,11 +168,22 @@ const handleSaveChanges = async () => {
     const data = await response.json();
     if (data.message === "User updated successfully") {
       console.log("User data updated successfully!");
+
+        setSnackbarMessage("User data updated successfully!");
+        setSnackbarSeverity("success");
+        setSnackbarOpen(true);
     } else {
       console.error('Error updating user data:', data.message);
+
+        setSnackbarMessage("Error updating user data: " + data.message);
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
     }
   } catch (error) {
     console.error('Error updating user data:', error);
+            setSnackbarMessage("Error updating user data: " + data.message);
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
   }
 };
 
@@ -160,6 +192,9 @@ const handleSavePassword = async () => {
   // Ensure the new password and confirm password are the same
   if (newPassword !== confirmPassword) {
     console.error("New password and confirm password do not match.");
+    setSnackbarMessage("New password and confirm password do not match.");
+    setSnackbarSeverity("error");
+    setSnackbarOpen(true);
     return;
   }
 
@@ -184,14 +219,25 @@ const handleSavePassword = async () => {
 
     const data = await response.json();
 
-    if (data.success) {
-      console.log("Password updated successfully!");
-      setOpenModal(false); // Close the modal
-    } else {
-      console.error('Error updating password:', data.message);
-    }
+  // Example for handleSavePassword:
+  if (data.success) {
+    console.log("Password updated successfully!");
+    setSnackbarMessage("Password updated successfully!");
+    setSnackbarSeverity("success");
+    setSnackbarOpen(true);
+    setOpenModal(false); // Close the modal
+  } else {
+    console.error('Error updating password:', data.message);
+    setSnackbarMessage(data.message);
+    setSnackbarSeverity("error");
+    setSnackbarOpen(true);
+  }
+
   } catch (error) {
     console.error('Error updating password:', error);
+    setSnackbarMessage('Error updating password:' + error);
+    setSnackbarSeverity("error");
+    setSnackbarOpen(true);
   }
   handleCloseModal();
 };
@@ -205,6 +251,28 @@ const handleSavePassword = async () => {
   };
   return (
     <>
+    <Snackbar 
+    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+  open={snackbarOpen} 
+  autoHideDuration={6000} 
+  onClose={handleSnackbarClose}
+  anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+>
+  <Alert 
+  onClose={handleSnackbarClose} 
+  severity={snackbarSeverity} 
+  sx={{ 
+    width: '90%', 
+    maxWidth: '600px', 
+    fontSize: '1.2rem', 
+    padding: '20px' 
+  }}
+>
+  {snackbarMessage}
+</Alert>
+
+</Snackbar>
+
       <ResponsiveAppBar />
       <div style={{
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0.20)),url(./src/assets/xd.png)`,

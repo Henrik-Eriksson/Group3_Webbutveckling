@@ -16,6 +16,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import EventDetails from '../components/EventDetails.jsx';
 import { authenticate } from '../../app.jsx'
+import { Snackbar, Alert } from "@mui/material";
 
 
 export const StyleWrapper = styled.div`
@@ -31,6 +32,10 @@ font-size: 0.95em;  /* Adjust as needed */
     background-size: cover; /* Adjust the image to cover the entire element */
     background-repeat: no-repeat; /* Prevents the image from repeating */
     background-position: center; /* Centers the image */
+}
+.css-14ogsoa-MuiModal-root-MuiPopover-root-MuiMenu-root
+{
+  margin-top: 0px !important;
 }
 .fc table
 {
@@ -157,14 +162,25 @@ function MyCalendar() {
       console.log("Event added successfully");
       console.log(response);
       setEvents(prevEvents => [...prevEvents, newEvent]);
+
+        setSnackbarMessage("Event added successfully");
+        setSnackbarSeverity("success");
+        setSnackbarOpen(true);
+
     } else {
       console.log("Something went wrong while adding the event");
       console.log(response);
+              setSnackbarMessage("Something went wrong while adding the event");
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
     }
 
   } catch (error) {
     console.error("An error occurred while adding the event: " + error.message);
     console.log(response)
+           setSnackbarMessage("Something went wrong while adding the event" + error.message);
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
   }
 }
 
@@ -203,7 +219,15 @@ function handleEventClick(info)
 
 }
 
-
+const [snackbarOpen, setSnackbarOpen] = useState(false);
+const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // can be 'error', 'warning', 'info', 'success'
+const [snackbarMessage, setSnackbarMessage] = useState('');
+const handleSnackbarClose = (event, reason) => {
+  if (reason === 'clickaway') {
+    return;
+  }
+  setSnackbarOpen(false);
+};
   const [selectedDates, setSelectedDates] = useState([]);
 
 
@@ -225,8 +249,17 @@ function handleDateClick(info) {
   const [open, setOpen] = useState(false);
   const [openEventDetails, setOpenEventDetails] = useState(false);
   function createEventClick(info) {
+    if (selectedDates.length !== 0)
+    {
     console.log(info);
     setOpen(true); // Open the dialog
+    }
+    else
+    {
+              setSnackbarMessage("Please select a date on the calendar by clicking on it before you proceed to create an event.");
+        setSnackbarSeverity("info");
+        setSnackbarOpen(true);
+    }
   }
 
   function handleDetailClose()
@@ -310,6 +343,7 @@ function toLocalISOString(date) {
 
 
   return (
+
     <div style={{
       backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),url(./src/assets/hejsan.png)`,
       backgroundSize: "cover",
@@ -319,6 +353,27 @@ function toLocalISOString(date) {
       alignItems: "center",
       justifyContent: "center"
     }}>
+        <Snackbar 
+    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+  open={snackbarOpen} 
+  autoHideDuration={6000} 
+  onClose={handleSnackbarClose}
+  anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+>
+  <Alert 
+  onClose={handleSnackbarClose} 
+  severity={snackbarSeverity} 
+  sx={{ 
+    width: '90%', 
+    maxWidth: '600px', 
+    fontSize: '1.2rem', 
+    padding: '20px' 
+  }}
+>
+  {snackbarMessage}
+</Alert>
+
+</Snackbar>
     <Grid container spacing={0}>
       <ResponsiveAppBar />
 
